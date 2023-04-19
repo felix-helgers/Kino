@@ -76,9 +76,7 @@ Platzkategorien
 	Love-Seats
 
 GITHub
-Login:
-	felix-helgers
-	Kino2023!
+
 Branches:
 	Für jede Größere Anpassung neuen Featurebranch.
 
