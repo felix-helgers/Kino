@@ -24,7 +24,7 @@ public class RegisterAdapter implements ActionListener {
 	            System.out.println("Registered with username: " + username + ", password: " + password);
 	            registerGUI.dispose();
 	            user = new User(username, password, email, firstName, lastName);
-	            Main.printUserInfos(user);
+//	            Main.printUserInfos(user);
 	        }
 
 	        public void onCancel() {

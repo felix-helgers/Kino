@@ -60,7 +60,7 @@ public class SignInAdapter implements ActionListener {
 	        boolean authenticated = usermanager.authenticate(username, password);
 	
 	        if (!authenticated) {
-	        	signInGUI.errorLabel.setText("  Passwort ist ungÃ¼ltig");
+	        	signInGUI.errorLabel.setText("  Passwort ist ungültig");
 	        	trys++;
 	        } else {
 	        	signInGUI.errorLabel.setText("");

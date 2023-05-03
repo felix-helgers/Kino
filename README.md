@@ -44,8 +44,11 @@ Tabellen:
 	a.	ID
 	b.	Name
 	c.	Länge
-	d.	Preiskategorie
-9.	I18N
+9.	Platzkategorie
+	a.	ID
+	b.	Name
+	c. 	Preis
+10.	I18N
 	a.	Key
 	b.	Value
 
