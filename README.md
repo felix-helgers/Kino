@@ -44,14 +44,20 @@ Tabellen:
 	a.	ID
 	b.	Name
 	c.	Länge
-9.	Platzkategorie
+	d.	Preiskategorie
+9.	PreisKategorie
 	a.	ID
 	b.	Name
-	c. 	Preis
+	c.	Kategorie
+	d. 	Preis
 10.	I18N
 	a.	Key
 	b.	Value
-
+11.	PreisModi
+	a.	ID
+	b.	Name
+	c.	ModifierinEur
+	d.	Beschreibung
 
 GUI
 Fenster:
