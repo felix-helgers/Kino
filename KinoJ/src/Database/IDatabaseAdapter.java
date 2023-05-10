@@ -9,6 +9,6 @@ public interface IDatabaseAdapter {
 	public boolean SaveUser(User user);
 	public boolean DeleteUser(User user);
 	public ResultSet getTable(String tableName);
-	public boolean CreateBooking(User user, String screeningID, String seatNr);
-	public boolean CreateScreening(String name, String length);
+	public boolean CreateBooking(User user, String screeningID, String... seatNr);
+	public boolean CreateScreening(int film, int hall, String startTime);
 }

@@ -33,35 +33,42 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean SaveUser(User user) {
-		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + user.getUserGroup().getID() + "')", 1);
+		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + user.getUserGroup().getID() + "');", 1);
 	}
 
 	@Override
 	public boolean DeleteUser(User user) {
-		return executeNonQuery("Delete user where username = " + user.getUsername(), 1);
+		return executeNonQuery("Delete user where username = " + user.getUsername() + ";", 1);
 	}
 
 	@Override
 	public ResultSet getTable(String tableName) {
-		return executeQuery("Select * from " + tableName);
+		return executeQuery("Select * from " + tableName + ";");
 	}
 
 	@Override
-	public boolean CreateBooking(User user, String screeningID, String seatNr) {
-		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "')", 1)) {
+	public boolean CreateBooking(User user, String screeningID, String... seatNr) {
+		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "');", 1)) {
 			return false;
 		}
-		//TODO: Reservierung erstellen
 		
-		return true;
+		try {
+			int bookingId = executeQuery("Select Max(Id) from Buchung;").getInt(0);
+			for (int i = 0; i < seatNr.length; i++) {
+				executeNonQuery("Insert into Reservierung (Buchung, Vorstellung, SitzPlatzId) Values ('" + bookingId + "', '" + screeningID + "','" + seatNr[i] + "');", 1);
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
-	public boolean CreateScreening(String name, String length) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean CreateScreening(int film, int hall, String startTime) {
+		return executeNonQuery("Insert into Vorstellung (Saal, Film, Startzeit) Values (" + hall + ", " + film + ", '" + startTime + "');", 1);
 	}
-	
+
 	public boolean executeNonQuery(String sqlStatement, int expectedRowsChanged) {
         Statement statement = null;
 
