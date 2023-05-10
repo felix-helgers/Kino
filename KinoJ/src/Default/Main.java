@@ -1,13 +1,16 @@
 package Default;
 
+import Database.IDatabaseAdapter;
+import Database.SQLiteAdapter;
 import UserManager.*;
 
 public class Main {
 	static UserManager usermanager = new UserManager();
-
+	private static IDatabaseAdapter DBAdapter;
+	
 	public static void main(String[] args) {
 		Main main = new Main();
-		
+		DBAdapter = SQLiteAdapter.getInstance();
 		main.showMainWindow();
 	}
 	

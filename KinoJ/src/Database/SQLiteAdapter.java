@@ -6,6 +6,22 @@ import UserManager.User;
 public class SQLiteAdapter implements IDatabaseAdapter {
 	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
 	private Connection conn;
+	private static SQLiteAdapter instance;
+	
+	public SQLiteAdapter() {
+		establishDatabaseConnection();
+	}
+	
+	public static SQLiteAdapter getInstance() {
+	    if (instance == null) {
+	        synchronized (SQLiteAdapter.class) {
+	            if (instance == null) {
+	                instance = new SQLiteAdapter();
+	            }
+	        }
+	    }
+	    return instance;
+	}
 	
 	private boolean establishDatabaseConnection() {
 		Connection conn = null;
@@ -21,15 +37,11 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	}
 	
 	@Override
-	public User GetUser(String username) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return null;			
-			}
-		}
+	public User GetUser(String username, String password) {
+		ensureConnection();
 		
 		try {
-			ResultSet rs = executeQuery("Select * from User where username = '" + username + "'");
+			ResultSet rs = executeQuery("Select * from User where username = '" + username + "' And password = '" + password + "'");
 			return new User(rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(3), rs.getString(4));
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -39,9 +51,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean SaveUser(User user) {
-		if (conn == null) {
-			this.establishDatabaseConnection();
-		}
+		ensureConnection();
 		
 		int UserGroupID = 0;
 		if (user.getUserGroup() != null) {
@@ -52,11 +62,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean DeleteUser(User user) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return false;			
-			}
-		}
+		ensureConnection();
 		return executeNonQuery("Delete user where username = " + user.getUsername() + ";", 1);
 	}
 
@@ -72,11 +78,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean CreateBooking(User user, String screeningID, String... seatNr) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return false;			
-			}
-		}
+		ensureConnection();
 		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "');", 1)) {
 			return false;
 		}
@@ -95,20 +97,12 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean CreateScreening(int film, int hall, String startTime) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return false;			
-			}
-		}
+		ensureConnection();
 		return executeNonQuery("Insert into Vorstellung (Saal, Film, Startzeit) Values (" + hall + ", " + film + ", '" + startTime + "');", 1);
 	}
 
 	public boolean executeNonQuery(String sqlStatement, int expectedRowsChanged) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return false;			
-			}
-		}
+		ensureConnection();
 		
         Statement statement = null;
 
@@ -148,11 +142,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
     }
 	
 	private ResultSet executeQuery(String sql) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return null;			
-			}
-		}
+		ensureConnection();
 		
 		try {
 			this.conn.setAutoCommit(true);
@@ -161,5 +151,26 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 			System.out.println("Execution failed: " + ex.getMessage());
 		}
 		return null;
+	}
+
+	@Override
+	public boolean UserNameExists(String username) {
+		ensureConnection();
+		
+		try {
+			return executeQuery("Select * from User where username = '" + username + "';").first();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean ensureConnection() {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return false;			
+			}
+		}
+		return true;
 	}
 }
