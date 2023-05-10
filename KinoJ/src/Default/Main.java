@@ -10,8 +10,13 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Main main = new Main();
-		DBAdapter = SQLiteAdapter.getInstance();
+		main.createDatabaseAdapter();
 		main.showMainWindow();
+	}
+	
+	private void createDatabaseAdapter() {
+		System.out.println("Datenbankverbindung wird aufgebaut...");
+		DBAdapter = SQLiteAdapter.getInstance();
 	}
 	
 	public static void printUserInfos(User user) {
