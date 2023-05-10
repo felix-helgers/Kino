@@ -1,7 +1,7 @@
 package UserManager;
 
 public class Group {
-	private int ID;
+	private int ID = 0;
 	private String name;
 	
 	public Group(String name) {

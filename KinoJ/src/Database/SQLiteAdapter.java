@@ -4,7 +4,7 @@ import java.sql.*;
 import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
-	private final String DatabasePath = ".\\Database\\Kino.db";
+	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
 	private Connection conn;
 	
 	private boolean establishDatabaseConnection() {
@@ -22,6 +22,12 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	
 	@Override
 	public User GetUser(String username) {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return null;			
+			}
+		}
+		
 		try {
 			ResultSet rs = executeQuery("Select * from User where username = '" + username + "'");
 			return new User(rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(3), rs.getString(4));
@@ -33,21 +39,44 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean SaveUser(User user) {
-		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + user.getUserGroup().getID() + "');", 1);
+		if (conn == null) {
+			this.establishDatabaseConnection();
+		}
+		
+		int UserGroupID = 0;
+		if (user.getUserGroup() != null) {
+			UserGroupID = user.getUserGroup().getID();
+		}
+		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + UserGroupID + "');", 1);
 	}
 
 	@Override
 	public boolean DeleteUser(User user) {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return false;			
+			}
+		}
 		return executeNonQuery("Delete user where username = " + user.getUsername() + ";", 1);
 	}
 
 	@Override
 	public ResultSet getTable(String tableName) {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return null;			
+			}
+		}
 		return executeQuery("Select * from " + tableName + ";");
 	}
 
 	@Override
 	public boolean CreateBooking(User user, String screeningID, String... seatNr) {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return false;			
+			}
+		}
 		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "');", 1)) {
 			return false;
 		}
@@ -66,10 +95,21 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean CreateScreening(int film, int hall, String startTime) {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return false;			
+			}
+		}
 		return executeNonQuery("Insert into Vorstellung (Saal, Film, Startzeit) Values (" + hall + ", " + film + ", '" + startTime + "');", 1);
 	}
 
 	public boolean executeNonQuery(String sqlStatement, int expectedRowsChanged) {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return false;			
+			}
+		}
+		
         Statement statement = null;
 
         try {
