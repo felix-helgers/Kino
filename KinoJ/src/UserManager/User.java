@@ -8,14 +8,6 @@ public class User {
 	private String lastName;
 	private String paymentMethod;
 	private Group UserGroup;
-
-	public User(String username, String password, String email, String firstName, String lastName, Group userGroup) {
-	    setUsername(username);
-	    setPassword(password);
-	    setEmail(email);
-	    setFirstName(firstName);
-	    setLastName(lastName);
-	}
 	
 	public User(String username, String password, String email, String firstName, String lastName) {
 	    setUsername(username);
@@ -23,11 +15,6 @@ public class User {
 	    setEmail(email);
 	    setFirstName(firstName);
 	    setLastName(lastName);
-	}
-	
-	public User(String username, String password) {
-		setUsername(username);
-		setPassword(password);
 	}
 
 	public String getUsername() {

@@ -22,36 +22,83 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	
 	@Override
 	public User GetUser(String username) {
-		// TODO Auto-generated method stub
+		try {
+			ResultSet rs = executeQuery("Select * from User where username = '" + username + "'");
+			return new User(rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(3), rs.getString(4));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	public boolean SaveUser(User user) {
-		// TODO Auto-generated method stub
-		return false;
+		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + user.getUserGroup().getID() + "')", 1);
 	}
 
 	@Override
-	public void DeleteUser(User user) {
-		// TODO Auto-generated method stub
+	public boolean DeleteUser(User user) {
+		return executeNonQuery("Delete user where username = " + user.getUsername(), 1);
 	}
 
 	@Override
 	public ResultSet getTable(String tableName) {
-		// TODO Auto-generated method stub
-		return null;
+		return executeQuery("Select * from " + tableName);
 	}
 
 	@Override
-	public void CreateBooking(User user, String screeningID, String seatNr) {
-		// TODO Auto-generated method stub
+	public boolean CreateBooking(User user, String screeningID, String seatNr) {
+		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "')", 1)) {
+			return false;
+		}
+		//TODO: Reservierung erstellen
+		
+		return true;
 	}
 
 	@Override
-	public void CreateScreening(String name, String length) {
+	public boolean CreateScreening(String name, String length) {
 		// TODO Auto-generated method stub
+		return false;
 	}
+	
+	public boolean executeNonQuery(String sqlStatement, int expectedRowsChanged) {
+        Statement statement = null;
+
+        try {
+        	this.conn.setAutoCommit(false);
+
+            statement = this.conn.createStatement();
+            int rowsChanged = statement.executeUpdate(sqlStatement);
+
+            if (rowsChanged != expectedRowsChanged) {
+            	this.conn.rollback();
+                System.out.println("Execution failed. Unexpected number of rows changed. Expected: " + expectedRowsChanged + ", Actual: " + rowsChanged);
+            } else {
+            	this.conn.commit();
+                System.out.println("Execution successful. Number of rows changed: " + rowsChanged);
+            }
+            return true;
+        } catch (SQLException e) {
+            if (this.conn != null) {
+                try {
+                	this.conn.rollback();
+                } catch (SQLException ex) {
+                    System.out.println("Rollback failed: " + ex.getMessage());
+                }
+            }
+            System.out.println("Execution failed: " + e.getMessage());
+            return false;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.out.println("Failed to close statement: " + ex.getMessage());
+                }
+            }
+        }
+    }
 	
 	private ResultSet executeQuery(String sql) {
 		if (this.conn == null) {
@@ -61,9 +108,10 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		}
 		
 		try {
+			this.conn.setAutoCommit(true);
 			return conn.prepareStatement(sql).executeQuery();
 		} catch (SQLException ex) {
-			
+			System.out.println("Execution failed: " + ex.getMessage());
 		}
 		return null;
 	}
