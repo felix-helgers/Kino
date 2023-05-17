@@ -25,7 +25,7 @@ public class SignInAdapter implements ActionListener {
 	        public void onSignIn(String username, String password) {
 	            System.out.println("Signed in with username: " + username + ", password: " + password);
 	            signInGUI.dispose();
-	            user = usermanager.getUser(username);
+	            user = usermanager.getUser(username, password);
 	            Main.printUserInfos(user);
 	        }
 	        

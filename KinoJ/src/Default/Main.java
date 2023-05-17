@@ -1,14 +1,22 @@
 package Default;
 
+import Database.IDatabaseAdapter;
+import Database.SQLiteAdapter;
 import UserManager.*;
 
 public class Main {
 	static UserManager usermanager = new UserManager();
-
+	private static IDatabaseAdapter DBAdapter;
+	
 	public static void main(String[] args) {
 		Main main = new Main();
-		
+		main.createDatabaseAdapter();
 		main.showMainWindow();
+	}
+	
+	private void createDatabaseAdapter() {
+		System.out.println("Datenbankverbindung wird aufgebaut...");
+		DBAdapter = SQLiteAdapter.getInstance();
 	}
 	
 	public static void printUserInfos(User user) {

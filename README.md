@@ -44,7 +44,6 @@ Tabellen:
 	a.	ID
 	b.	Name
 	c.	Länge
-	d.	Preiskategorie
 9.	PreisKategorie
 	a.	ID
 	b.	Name

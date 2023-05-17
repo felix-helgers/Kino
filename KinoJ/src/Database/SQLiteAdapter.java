@@ -4,8 +4,24 @@ import java.sql.*;
 import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
-	private final String DatabasePath = ".\\Database\\Kino.db";
+	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
 	private Connection conn;
+	private static SQLiteAdapter instance;
+	
+	public SQLiteAdapter() {
+		establishDatabaseConnection();
+	}
+	
+	public static SQLiteAdapter getInstance() {
+	    if (instance == null) {
+	        synchronized (SQLiteAdapter.class) {
+	            if (instance == null) {
+	                instance = new SQLiteAdapter();
+	            }
+	        }
+	    }
+	    return instance;
+	}
 	
 	private boolean establishDatabaseConnection() {
 		Connection conn = null;
@@ -21,9 +37,11 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	}
 	
 	@Override
-	public User GetUser(String username) {
+	public User GetUser(String username, String password) {
+		ensureConnection();
+		
 		try {
-			ResultSet rs = executeQuery("Select * from User where username = '" + username + "'");
+			ResultSet rs = executeQuery("Select * from User where username = '" + username + "' And passwort = '" + password + "'");
 			return new User(rs.getString(1), rs.getString(2), rs.getString(5), rs.getString(3), rs.getString(4));
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -33,36 +51,59 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean SaveUser(User user) {
-		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + user.getUserGroup().getID() + "')", 1);
+		ensureConnection();
+		
+		int UserGroupID = 0;
+		if (user.getUserGroup() != null) {
+			UserGroupID = user.getUserGroup().getID();
+		}
+		return executeNonQuery("Insert into User (username, vorname, nachname, email, passwort, BerechtigungsGruppenId) Values ('" + user.getUsername() + "','" + user.getFirstName() + "','" + user.getLastName() + "','" + user.getEmail() + "','" + user.getPassword() + "', '" + UserGroupID + "');", 1);
 	}
 
 	@Override
 	public boolean DeleteUser(User user) {
-		return executeNonQuery("Delete user where username = " + user.getUsername(), 1);
+		ensureConnection();
+		return executeNonQuery("Delete user where username = " + user.getUsername() + ";", 1);
 	}
 
 	@Override
 	public ResultSet getTable(String tableName) {
-		return executeQuery("Select * from " + tableName);
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return null;			
+			}
+		}
+		return executeQuery("Select * from " + tableName + ";");
 	}
 
 	@Override
-	public boolean CreateBooking(User user, String screeningID, String seatNr) {
-		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "')", 1)) {
+	public boolean CreateBooking(User user, String screeningID, String... seatNr) {
+		ensureConnection();
+		if (!executeNonQuery("Insert into Buchung (Username) Values ('" + user.getUsername() + "');", 1)) {
 			return false;
 		}
-		//TODO: Reservierung erstellen
 		
-		return true;
+		try {
+			int bookingId = executeQuery("Select Max(Id) from Buchung;").getInt(0);
+			for (int i = 0; i < seatNr.length; i++) {
+				executeNonQuery("Insert into Reservierung (Buchung, Vorstellung, SitzPlatzId) Values ('" + bookingId + "', '" + screeningID + "','" + seatNr[i] + "');", 1);
+			}
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
-	public boolean CreateScreening(String name, String length) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean CreateScreening(int film, int hall, String startTime) {
+		ensureConnection();
+		return executeNonQuery("Insert into Vorstellung (Saal, Film, Startzeit) Values (" + hall + ", " + film + ", '" + startTime + "');", 1);
 	}
-	
+
 	public boolean executeNonQuery(String sqlStatement, int expectedRowsChanged) {
+		ensureConnection();
+		
         Statement statement = null;
 
         try {
@@ -101,11 +142,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
     }
 	
 	private ResultSet executeQuery(String sql) {
-		if (this.conn == null) {
-			if (this.establishDatabaseConnection() == false) {
-				return null;			
-			}
-		}
+		ensureConnection();
 		
 		try {
 			this.conn.setAutoCommit(true);
@@ -114,5 +151,26 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 			System.out.println("Execution failed: " + ex.getMessage());
 		}
 		return null;
+	}
+
+	@Override
+	public boolean UserNameExists(String username) {
+		ensureConnection();
+		
+		try {
+			return executeQuery("Select * from User where username = '" + username + "';").first();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	private boolean ensureConnection() {
+		if (this.conn == null) {
+			if (this.establishDatabaseConnection() == false) {
+				return false;			
+			}
+		}
+		return true;
 	}
 }

@@ -7,7 +7,7 @@ public class UserManager {
 	private IDatabaseAdapter DBAdapter;
 	
 	public UserManager() {
-		DBAdapter = new SQLiteAdapter();
+		DBAdapter = SQLiteAdapter.getInstance();
 	}
 
 	public boolean addUser(User user) {
@@ -15,12 +15,12 @@ public class UserManager {
 	}
 
 	public boolean authenticate(String username, String password) {
-		User user = DBAdapter.GetUser(username);
+		User user = DBAdapter.GetUser(username, password);
 		return user != null && user.getPassword().equals(password);
 	}
 	
-	public User getUser(String username) {
-		return DBAdapter.GetUser(username);
+	public User getUser(String username, String password) {
+		return DBAdapter.GetUser(username, password);
 	}
 
 	public void deleteUser(User user) {
@@ -28,6 +28,6 @@ public class UserManager {
 	}
 
 	public boolean usernameExists(String username) {
-		return DBAdapter.GetUser(username) != null;
+		return DBAdapter.UserNameExists(username);
 	}
 }
