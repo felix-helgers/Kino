@@ -146,7 +146,9 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		
 		try {
 			this.conn.setAutoCommit(true);
-			return conn.prepareStatement(sql).executeQuery();
+	        Statement statement = conn.createStatement();
+	        ResultSet resultSet = statement.executeQuery(sql);
+			return resultSet;
 		} catch (SQLException ex) {
 			System.out.println("Execution failed: " + ex.getMessage());
 		}

@@ -15,7 +15,6 @@ public class Main {
 	}
 	
 	private void createDatabaseAdapter() {
-		System.out.println("Datenbankverbindung wird aufgebaut...");
 		DBAdapter = SQLiteAdapter.getInstance();
 	}
 	
