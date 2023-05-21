@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.SwingUtilities;
 
+import UserManager.User;
+
 
 public class MainAdapter implements ActionListener {
 	MainGUI mainGUI;
@@ -21,12 +23,19 @@ public class MainAdapter implements ActionListener {
 	    });
 	}
 	
+	public void setUserLabel(String username) {
+		mainGUI.setUserLabel(username);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == mainGUI.registerButton) {
-			Main.register();
+			setUserLabel(Main.register().getUsername());
 		} else if (e.getSource() == mainGUI.signInButton) {
-			Main.SignIn();
+			User user = Main.SignIn();
+			if (user.getUsername() != null) {
+				setUserLabel(user.getUsername());
+			}
 		}
 	}
 }

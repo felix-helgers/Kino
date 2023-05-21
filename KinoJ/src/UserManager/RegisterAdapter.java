@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import Default.Main;
 import Hash.Hash;
 
 public class RegisterAdapter implements ActionListener {
@@ -24,7 +23,6 @@ public class RegisterAdapter implements ActionListener {
 	            System.out.println("Registered with username: " + username + ", password: " + password);
 	            registerGUI.dispose();
 	            user = new User(username, password, email, firstName, lastName);
-//	            Main.printUserInfos(user);
 	        }
 
 	        public void onCancel() {

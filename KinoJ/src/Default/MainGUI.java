@@ -40,6 +40,10 @@ public class MainGUI extends JFrame {
 	    setVisible(true);
 	}
 	
+	public void setUserLabel(String username) {
+		userLabel.setText(username);
+	}
+	
     public void addActionListener(ActionListener listener) {
     	signInButton.addActionListener(listener);
     	registerButton.addActionListener(listener);

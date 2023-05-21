@@ -1,12 +1,12 @@
 package Default;
 
-import Database.IDatabaseAdapter;
-import Database.SQLiteAdapter;
+//import Database.IDatabaseAdapter;
+//import Database.SQLiteAdapter;
 import UserManager.*;
 
 public class Main {
 	static UserManager usermanager = new UserManager();
-	private static IDatabaseAdapter DBAdapter;
+//	private static IDatabaseAdapter DBAdapter;
 	
 	public static void main(String[] args) {
 		Main main = new Main();
@@ -15,7 +15,7 @@ public class Main {
 	}
 	
 	private void createDatabaseAdapter() {
-		DBAdapter = SQLiteAdapter.getInstance();
+//		DBAdapter = SQLiteAdapter.getInstance();
 	}
 	
 	public static void printUserInfos(User user) {

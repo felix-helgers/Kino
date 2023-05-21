@@ -4,7 +4,8 @@ import java.sql.*;
 import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
-	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
+	private final String DatabasePath = "E:\\eclipse-workspace\\Kino\\Kino\\Database\\Kino.db";
+//	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
 	private Connection conn;
 	private static SQLiteAdapter instance;
 	
@@ -42,7 +43,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		
 		try {
 			ResultSet rs = executeQuery("Select * from User where username = '" + username + "' And passwort = '" + password + "'");
-			return new User(rs.getString(1), rs.getString(5), rs.getString(4), rs.getString(2), rs.getString(3));
+			return new User(username, password, rs.getString(4), rs.getString(2), rs.getString(3));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
