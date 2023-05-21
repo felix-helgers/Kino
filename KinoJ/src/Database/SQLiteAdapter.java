@@ -1,10 +1,12 @@
 package Database;
 
 import java.sql.*;
+import java.util.ArrayList;
+
 import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
-	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
+	private final String DatabasePath = "D:\\Workspace-Eclipse\\Kino\\Database\\Kino.db";
 	private Connection conn;
 	private static SQLiteAdapter instance;
 	
@@ -172,5 +174,22 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 			}
 		}
 		return true;
+	}
+	
+	public ArrayList<String> getMoviesWithScreeningAndPoster() {
+		
+	    ArrayList<String> returnArray = new ArrayList<String>();
+		ResultSet filme = executeQuery("select f.Name from Film f inner join Vorstellung v on f.id = v.Film where f.hasPlakat = 1");
+		String value;
+		 try {
+			while (filme.next()) {
+			       value = filme.getString(1);
+				   returnArray.add(value);
+			    }
+		} catch (SQLException e) {
+			
+			System.out.println("Filme konnten aus der Datenbank nicht geholt werden");
+		}
+		return returnArray;
 	}
 }
