@@ -20,6 +20,7 @@ import java.io.File;
 
 public class MainGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
+
 	JButton registerButton;
 	JButton signInButton;
 	private JLabel userLabel;
@@ -76,6 +77,7 @@ public class MainGUI extends JFrame {
         filme.forEach(film -> {
         
         ImageIcon bildIcon = new ImageIcon(ordnerpfad + film +".jpg");
+
         
         int desiredWidth = 200;
         int desiredHeight = 300;
@@ -94,6 +96,9 @@ public class MainGUI extends JFrame {
             String abgeschnittenerTitel = film.substring(0, 20) + "...";
             titelLabel.setText(abgeschnittenerTitel);
         }
+
+
+
 
         JPanel plakatPanel = new JPanel(new BorderLayout());
         plakatPanel.add(bildLabel, BorderLayout.CENTER);

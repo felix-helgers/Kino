@@ -9,6 +9,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	private final String DatabasePath = "D:\\Workspace-Eclipse\\Kino\\Database\\Kino.db";
 
+
 	private Connection conn;
 	private static SQLiteAdapter instance;
 	
@@ -183,7 +184,9 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public ArrayList<String> getMoviesWithScreeningAndPoster() {
 		
 	    ArrayList<String> returnArray = new ArrayList<String>();
+
 		ResultSet filme = executeQuery("select f.Name from Film f inner join Vorstellung v on f.id = v.Film where f.Poster = 1");
+
 		String value;
 		 try {
 			while (filme.next()) {
