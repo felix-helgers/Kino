@@ -76,9 +76,25 @@ public class MainGUI extends JFrame {
         filme.forEach(film -> {
         
         ImageIcon bildIcon = new ImageIcon(ordnerpfad + film +".jpg");
+        
+        int desiredWidth = 200;
+        int desiredHeight = 300;
+        Image scaledImage = bildIcon.getImage().getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
-        JLabel bildLabel = new JLabel(bildIcon);
+        JLabel bildLabel = new JLabel(scaledIcon);
+        
+        
         JLabel titelLabel = new JLabel(film);
+        titelLabel.setPreferredSize(new Dimension(150, titelLabel.getPreferredSize().height)); // Maximale Breite des Labels festlegen
+        titelLabel.setToolTipText(film); // Hinzufügen eines Tooltips, um den vollständigen Titel anzuzeigen
+
+        if (film.length() > 20) {
+            // Titel abschneiden und mit ... enden
+            String abgeschnittenerTitel = film.substring(0, 20) + "...";
+            titelLabel.setText(abgeschnittenerTitel);
+        }
+
         JPanel plakatPanel = new JPanel(new BorderLayout());
         plakatPanel.add(bildLabel, BorderLayout.CENTER);
         plakatPanel.add(titelLabel, BorderLayout.SOUTH);

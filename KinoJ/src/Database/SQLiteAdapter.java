@@ -183,7 +183,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public ArrayList<String> getMoviesWithScreeningAndPoster() {
 		
 	    ArrayList<String> returnArray = new ArrayList<String>();
-		ResultSet filme = executeQuery("select f.Name from Film f inner join Vorstellung v on f.id = v.Film where f.hasPlakat = 1");
+		ResultSet filme = executeQuery("select f.Name from Film f inner join Vorstellung v on f.id = v.Film where f.Poster = 1");
 		String value;
 		 try {
 			while (filme.next()) {
