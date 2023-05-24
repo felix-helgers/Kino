@@ -5,29 +5,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
 import Database.IDatabaseAdapter;
 import Database.SQLiteAdapter;
-
 import java.io.File;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.awt.GridBagConstraints;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
 
 public class MainGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	JButton registerButton;
 	JButton signInButton;
+	JButton signOutButton;
+	JButton showBookingsButton;
 	private JLabel userLabel;
 	private JPanel filmplakatePanel;
 	private JScrollPane scrollPane;
 	private IDatabaseAdapter databaseAdapter;
-	private String  ordnerpfad = "D:\\Workspace-Eclipse\\Kino\\KinoJ\\src\\Bilder\\";
-
+	private String  ordnerpfad = "H:\\eclipse-workspace\\Kino\\KinoJ\\src\\Bilder\\";
 	
 	public MainGUI() {
 		super("Kino");
@@ -42,8 +38,7 @@ public class MainGUI extends JFrame {
         
         userButtonPanel.add(new JLabel());
         
-        userLabel = new JLabel("Username ");
-        userLabel.setVisible(false);
+        userLabel = new JLabel("Nicht angemeldet  ");
         userButtonPanel.add(userLabel);
         
         registerButton = new JButton("Registrieren");
@@ -51,6 +46,14 @@ public class MainGUI extends JFrame {
         
         signInButton = new JButton("Anmelden");
         userButtonPanel.add(signInButton);
+        
+        signOutButton = new JButton("Abmelden");
+        signOutButton.setVisible(false);
+        userButtonPanel.add(signOutButton);
+        
+        showBookingsButton = new JButton("Buchungen");
+        showBookingsButton.setVisible(false);
+        userButtonPanel.add(showBookingsButton);
         
         topPanel.add(userButtonPanel, BorderLayout.EAST);
         panel.add(topPanel, BorderLayout.NORTH);
@@ -83,7 +86,7 @@ public class MainGUI extends JFrame {
         ImageIcon scaledIcon = new ImageIcon(scaledImage);
 
         JLabel bildLabel = new JLabel(scaledIcon);
-        
+
         
         JLabel titelLabel = new JLabel(film);
         titelLabel.setPreferredSize(new Dimension(150, titelLabel.getPreferredSize().height)); // Maximale Breite des Labels festlegen
@@ -112,9 +115,7 @@ public class MainGUI extends JFrame {
         if (gbc.gridx % 3 == 0) {
             gbc.gridx = 0;
             gbc.gridy++;
-        		
         }});
-        
         
         this.pack();
         this.setLocationRelativeTo(null);
@@ -122,12 +123,25 @@ public class MainGUI extends JFrame {
 	}
 	
 	public void setUserLabel(String username) {
+		userLabel.setVisible(true);
 		userLabel.setText(username);
+	}
+	
+	public void setSighInButtonVisibility(boolean visibility) {
+		registerButton.setVisible(visibility);
+		signInButton.setVisible(visibility);
+	}
+	
+	public void setUserButtonVisibility(boolean visibility) {
+		signOutButton.setVisible(visibility);
+		showBookingsButton.setVisible(visibility);
 	}
 	
     public void addActionListener(ActionListener listener) {
     	signInButton.addActionListener(listener);
     	registerButton.addActionListener(listener);
+    	signOutButton.addActionListener(listener);
+    	showBookingsButton.addActionListener(listener);
     }
     
  

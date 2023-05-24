@@ -26,7 +26,7 @@ public class SignInAdapter implements ActionListener {
 	            System.out.println("Signed in with username: " + username + ", password: " + password);
 	            signInGUI.dispose();
 	            user = usermanager.getUser(username, password);
-	            Main.printUserInfos(user);
+	            Main.setUserInfos(user);
 	        }
 	        
 	        public void onCancel() { 
@@ -38,7 +38,7 @@ public class SignInAdapter implements ActionListener {
 	    signinGUI(callback, this);
 	    return user;
 	}
-
+	
 	private void signinGUI(SignInGUI.SignInCallback callback, ActionListener listener) {
 	    SwingUtilities.invokeLater(new Runnable() {
 	        public void run() {
