@@ -44,7 +44,6 @@ public class MainAdapter implements ActionListener {
 			if (user != null) {
 				setUserLabel(user.getUsername());
 			}
-			//setUserLabel(Main.register().getUsername());
 		} else if (e.getSource() == mainGUI.signInButton) {
 			User user = Main.SignIn();
 			if (user != null) {
