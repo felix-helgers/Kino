@@ -198,4 +198,15 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		}
 		return returnArray;
 	}
+	
+	public void deleteReservation(int reservierungsID) {
+		this.ensureConnection();
+		this.executeNonQuery("delete from Reservierung where ID = "+ reservierungsID, 1);
+		System.out.println("Reservierung mit der ID " + reservierungsID + " wurde gelöscht.");
+	}
+	
+	public ResultSet getReservierungen(User user) {
+		this.ensureConnection();
+		return this.executeQuery("select ReservierungsID, Name, Saal, Seat, Uhrzeit, Datum from V_Res where username = '" + user.getUsername() + "'");
+	}
 }

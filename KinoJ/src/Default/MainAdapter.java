@@ -11,6 +11,7 @@ import UserManager.User;
 
 public class MainAdapter implements ActionListener {
 	MainGUI mainGUI;
+	User user;
 	
 	public void showGUI() {
 		mainGUI(this);
@@ -39,13 +40,14 @@ public class MainAdapter implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getSource() == mainGUI.registerButton) {
-			User user = Main.register();
+			 user = Main.register();
 			if (user != null) {
 				setUserLabel(user.getUsername());
 			}
 		} else if (e.getSource() == mainGUI.signInButton) {
-			User user = Main.SignIn();
+			 user = Main.SignIn();
 			if (user != null) {
 				setUserLabel(user.getUsername());
 			}
@@ -55,7 +57,7 @@ public class MainAdapter implements ActionListener {
 			setUserButtonVisibility(false);
 			setSighInButtonVisibility(true);
 		} else if (e.getSource() == mainGUI.showBookingsButton) {
-			JOptionPane.showMessageDialog(null, "Sie sind nicht für diese Funktion berechtigt.");
-		}
+             new BuchungenGUI(user);		
+        }
 	}
 }
