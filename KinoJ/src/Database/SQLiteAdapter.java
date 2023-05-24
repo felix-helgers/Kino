@@ -46,7 +46,9 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		
 		try {
 			ResultSet rs = executeQuery("Select * from User where username = '" + username + "' And passwort = '" + password + "'");
-			return new User(username, password, rs.getString(4), rs.getString(2), rs.getString(3));
+			if (rs.getString(1) != null) {			
+				return new User(username, password, rs.getString(4), rs.getString(2), rs.getString(3));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
