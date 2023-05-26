@@ -6,7 +6,7 @@ import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
 
-	private final String DatabasePath = "D:\\Workspace-Eclipse\\Kino\\Database\\Kino.db";
+	private final String DatabasePath = System.getProperty("user.dir") + "\\Database\\Kino.db";
 
 	private Connection conn;
 	private static SQLiteAdapter instance;
