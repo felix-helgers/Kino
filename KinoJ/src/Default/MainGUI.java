@@ -23,7 +23,7 @@ public class MainGUI extends JFrame {
 	private JPanel filmplakatePanel;
 	private JScrollPane scrollPane;
 	private IDatabaseAdapter databaseAdapter;
-	private String  ordnerpfad = "H:\\eclipse-workspace\\Kino\\KinoJ\\src\\Bilder\\";
+	private String  ordnerpfad = "D:\\Workspace-Eclipse\\Kino\\KinoJ\\src\\Bilder\\";
 	
 	public MainGUI() {
 		super("Kino");
@@ -105,8 +105,9 @@ public class MainGUI extends JFrame {
         plakatPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //Placeholder
-                System.out.println("Plakat " + film + " wurde geklickt.");
+            	System.out.println("Plakat " + film + " wurde geklickt.");
+            	new ScreeningsGUI(plakatPanel, film);
+                
             }
         });		
         filmplakatePanel.add(plakatPanel, gbc);

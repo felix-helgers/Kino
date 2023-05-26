@@ -25,7 +25,7 @@ public class BuchungenGUI extends JFrame {
     	this.user = user;
     	adapter = SQLiteAdapter.getInstance();
         setTitle("Buchungen");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
 
         // Erstellen der Tabelle
@@ -36,23 +36,22 @@ public class BuchungenGUI extends JFrame {
         tableModel.addColumn("Platznummer");
         tableModel.addColumn("Uhrzeit");
         tableModel.addColumn("Datum");
-
         table = new JTable(tableModel);
 
-        // Hinzufügen des Buttons als Spalte zur Tabelle
-        TableColumn buttonColumn = new TableColumn(tableModel.getColumnCount());
+        // HinzufÃ¼gen des Buttons als Spalte zur Tabelle
+        TableColumn buttonColumn = new TableColumn();
         buttonColumn.setHeaderValue("Aktion");
         table.addColumn(buttonColumn);
-
+        
         // Erstellen des Button-Renderers und -Editors
         ButtonRenderer buttonRenderer = new ButtonRenderer();
         ButtonEditor buttonEditor = new ButtonEditor(new JCheckBox());
 
-        // Setzen des Button-Renderers und -Editors für die Spalte
+        // Setzen des Button-Renderers und -Editors fï¿½r die Spalte
         buttonColumn.setCellRenderer(buttonRenderer);
         buttonColumn.setCellEditor(buttonEditor);
 
-        // Hinzufügen der Tabelle zur ScrollPane
+        // Hinzufï¿½gen der Tabelle zur ScrollPane
         JScrollPane scrollPane = new JScrollPane(table);
         getContentPane().add(scrollPane, BorderLayout.CENTER);
 
@@ -63,42 +62,46 @@ public class BuchungenGUI extends JFrame {
                 int row = table.getSelectedRow();
                 int column = table.getColumnCount() - 1; // Letzte Spalte mit Button
                 if (row >= 0 && column >= 0) {
-                    adapter.deleteReservation((int)table.getValueAt(row, 0));
+                    adapter.deleteReservation(Integer.parseInt(table.getValueAt(row, 0).toString()));
                     tableModel.removeRow(row);
                 }
+              
             }
         });
+        this.refreshTable();
         this.setVisible(true);
     }
 
     
 
     public void refreshTable() {
-        // Code zum Aktualisieren der Tabelle aus der SQLite-Datenbank hier einfügen
-        // Verbindung zur Datenbank herstellen, SQL-SELECT-Statement ausführen, usw.
+        // Code zum Aktualisieren der Tabelle aus der SQLite-Datenbank hier einfï¿½gen
+        // Verbindung zur Datenbank herstellen, SQL-SELECT-Statement ausfï¿½hren, usw.
         // Beispielcode:
         tableModel.setRowCount(0); // Alle vorhandenen Zeilen entfernen
             ResultSet resultSet = adapter.getReservierungen(user);       
             try {
 				while (resultSet.next()) {
-				    String id = resultSet.getString("ReservierungsID");
+				    int id = resultSet.getInt("ReservierungsID");
 					String filmname = resultSet.getString("Name");
-				    String saal = resultSet.getString("Saal");
+				    int saal = resultSet.getInt("Saal");
 				    String platznummer = resultSet.getString("Seat");
 				    String uhrzeit = resultSet.getString("Uhrzeit");
 				    String datum = resultSet.getString("Datum");
 
 				    Vector<String> row = new Vector<>();
-				    row.add(id);
+				    row.add(Integer.toString(id));
 				    row.add(filmname);
-				    row.add(saal);
+				    row.add(Integer.toString(saal));
 				    row.add(platznummer);
 				    row.add(uhrzeit);
 				    row.add(datum);
 				    tableModel.addRow(row);
 				}
+				
+				resultSet.close();
 			
-            resultSet.close();
+            
             } catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -120,7 +123,7 @@ public class BuchungenGUI extends JFrame {
                 setForeground(table.getForeground());
                 setBackground(UIManager.getColor("Button.background"));
             }
-            setText("Löschen");
+            setText("LÃ¶schen");
             return this;
         }
     }
@@ -158,7 +161,7 @@ public class BuchungenGUI extends JFrame {
 
     	    public Object getCellEditorValue() {
     	        if (isPushed) {
-    	            // Aktion ausführen, wenn Button geklickt wurde
+    	            // Aktion ausfï¿½hren, wenn Button geklickt wurde
     	            // Hier im Hauptcode umgesetzt
     	        }
     	        isPushed = false;
@@ -171,7 +174,7 @@ public class BuchungenGUI extends JFrame {
     	    }
 
     	    protected void fireEditingStopped() {
-    	        super.fireEditingStopped();
+    	     //   super.fireEditingStopped();
     	    }
 
     	    public void addActionListener(ActionListener listener) {

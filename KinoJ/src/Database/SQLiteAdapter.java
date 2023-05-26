@@ -7,7 +7,7 @@ import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
 
-	private final String DatabasePath = "H:\\eclipse-workspace\\Kino\\Database\\Kino.db";
+	private final String DatabasePath = "D:\\Workspace-Eclipse\\Kino\\Database\\Kino.db";
 
 	private Connection conn;
 	private static SQLiteAdapter instance;
@@ -202,11 +202,18 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public void deleteReservation(int reservierungsID) {
 		this.ensureConnection();
 		this.executeNonQuery("delete from Reservierung where ID = "+ reservierungsID, 1);
-		System.out.println("Reservierung mit der ID " + reservierungsID + " wurde gelöscht.");
+		System.out.println("Reservierung mit der ID " + reservierungsID + " wurde gelï¿½scht.");
 	}
 	
 	public ResultSet getReservierungen(User user) {
 		this.ensureConnection();
 		return this.executeQuery("select ReservierungsID, Name, Saal, Seat, Uhrzeit, Datum from V_Res where username = '" + user.getUsername() + "'");
+	}
+	
+	public ResultSet getVorstellungen (String film) {
+		this.ensureConnection();
+		return this.executeQuery("Select v.Saal, v.Startzeit, v.Datum from Vorstellung v inner join Film f on v.Film = f.ID where f.Name ='" + film + "';");
+		
+		
 	}
 }

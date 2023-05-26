@@ -16,4 +16,5 @@ public interface IDatabaseAdapter {
 	public ArrayList<String> getMoviesWithScreeningAndPoster();
 	public void deleteReservation(int reservierungsID);
 	public ResultSet getReservierungen(User user);
+	public ResultSet getVorstellungen(String film);
 }

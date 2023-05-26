@@ -11,7 +11,7 @@ import UserManager.User;
 
 public class MainAdapter implements ActionListener {
 	MainGUI mainGUI;
-	User user;
+	
 	
 	public void showGUI() {
 		mainGUI(this);
@@ -42,22 +42,18 @@ public class MainAdapter implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == mainGUI.registerButton) {
-			 user = Main.register();
-			if (user != null) {
-				setUserLabel(user.getUsername());
-			}
+			  Main.register();
+			
 		} else if (e.getSource() == mainGUI.signInButton) {
-			 user = Main.SignIn();
-			if (user != null) {
-				setUserLabel(user.getUsername());
-			}
+			  Main.SignIn();
+			
 		} else if (e.getSource() == mainGUI.signOutButton) {
-			setUserLabel("Nicht angemeldet   ");
+			setUserLabel("Nicht angemeldet");
 			System.out.println("User abgemeldet!");
 			setUserButtonVisibility(false);
 			setSighInButtonVisibility(true);
 		} else if (e.getSource() == mainGUI.showBookingsButton) {
-             new BuchungenGUI(user);		
+             new BuchungenGUI(Main.currentUser);		
         }
 	}
 }
