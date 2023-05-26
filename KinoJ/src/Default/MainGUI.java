@@ -22,7 +22,7 @@ public class MainGUI extends JFrame {
 	private JPanel filmplakatePanel;
 	private JScrollPane scrollPane;
 	private IDatabaseAdapter databaseAdapter;
-	private String  ordnerpfad = System.getProperty("user.dir") + "\\src\\Bilder\\";
+	private String  ordnerpfad = System.getProperty("user.dir") + "\\KinoJ\\bin\\Bilder\\";
 	
 	public MainGUI() {
 		super("Kino");
