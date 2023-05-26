@@ -2,7 +2,6 @@ package Database;
 
 import java.sql.*;
 import java.util.ArrayList;
-
 import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
@@ -213,7 +212,5 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public ResultSet getVorstellungen (String film) {
 		this.ensureConnection();
 		return this.executeQuery("Select v.Saal, v.Startzeit, v.Datum from Vorstellung v inner join Film f on v.Film = f.ID where f.Name ='" + film + "';");
-		
-		
 	}
 }

@@ -1,7 +1,5 @@
 package Default;
 
-//import Database.IDatabaseAdapter;
-//import Database.SQLiteAdapter;
 import UserManager.*;
 
 public class Main {

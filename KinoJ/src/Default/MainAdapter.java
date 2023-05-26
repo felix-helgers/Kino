@@ -2,16 +2,9 @@ package Default;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
-import UserManager.User;
-
-
 public class MainAdapter implements ActionListener {
 	MainGUI mainGUI;
-	
 	
 	public void showGUI() {
 		mainGUI(this);

@@ -3,10 +3,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-
 import Database.IDatabaseAdapter;
 import Database.SQLiteAdapter;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -72,8 +70,6 @@ public class BuchungenGUI extends JFrame {
         this.setVisible(true);
     }
 
-    
-
     public void refreshTable() {
         // Code zum Aktualisieren der Tabelle aus der SQLite-Datenbank hier einf�gen
         // Verbindung zur Datenbank herstellen, SQL-SELECT-Statement ausf�hren, usw.
@@ -100,13 +96,10 @@ public class BuchungenGUI extends JFrame {
 				}
 				
 				resultSet.close();
-			
             
             } catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        
     }
 	
     class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -129,56 +122,55 @@ public class BuchungenGUI extends JFrame {
     }
     
     class ButtonEditor extends DefaultCellEditor {
+    	protected JButton button;
+    	private String label;
+    	private boolean isPushed;
 
-    	 protected JButton button;
-    	    private String label;
-    	    private boolean isPushed;
+        public ButtonEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                }
+            });
+        }
 
-    	    public ButtonEditor(JCheckBox checkBox) {
-    	        super(checkBox);
-    	        button = new JButton();
-    	        button.setOpaque(true);
-    	        button.addActionListener(new ActionListener() {
-    	            public void actionPerformed(ActionEvent e) {
-    	                fireEditingStopped();
-    	            }
-    	        });
-    	    }
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+            if (isSelected) {
+                button.setForeground(table.getSelectionForeground());
+                button.setBackground(table.getSelectionBackground());
+            } else {
+                button.setForeground(table.getForeground());
+                button.setBackground(table.getBackground());
+            }
+            label = (value == null) ? "" : value.toString();
+            button.setText(label);
+            isPushed = true;
+            return button;
+        }
 
-    	    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-    	        if (isSelected) {
-    	            button.setForeground(table.getSelectionForeground());
-    	            button.setBackground(table.getSelectionBackground());
-    	        } else {
-    	            button.setForeground(table.getForeground());
-    	            button.setBackground(table.getBackground());
-    	        }
-    	        label = (value == null) ? "" : value.toString();
-    	        button.setText(label);
-    	        isPushed = true;
-    	        return button;
-    	    }
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                // Aktion ausf�hren, wenn Button geklickt wurde
+                // Hier im Hauptcode umgesetzt
+            }
+            isPushed = false;
+            return label;
+        }
 
-    	    public Object getCellEditorValue() {
-    	        if (isPushed) {
-    	            // Aktion ausf�hren, wenn Button geklickt wurde
-    	            // Hier im Hauptcode umgesetzt
-    	        }
-    	        isPushed = false;
-    	        return label;
-    	    }
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
 
-    	    public boolean stopCellEditing() {
-    	        isPushed = false;
-    	        return super.stopCellEditing();
-    	    }
+        protected void fireEditingStopped() {
+         //   super.fireEditingStopped();
+        }
 
-    	    protected void fireEditingStopped() {
-    	     //   super.fireEditingStopped();
-    	    }
-
-    	    public void addActionListener(ActionListener listener) {
-    	        button.addActionListener(listener);
-    	    }
-}
+        public void addActionListener(ActionListener listener) {
+            button.addActionListener(listener);
+        }
+    }
 }

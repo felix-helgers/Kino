@@ -52,13 +52,10 @@ public class ScreeningsGUI extends JFrame {
 		        infoBoxPanel.add(startzeitLabel);
 		        infoBoxPanel.add(datumLabel);
 		        
-		        
 		        infoBoxPanel.addMouseListener(new MouseAdapter() {
 		            @Override
 		            public void mouseClicked(MouseEvent e) {
 		            	System.out.println("Vorstellung wurde angeklickt.");
-		            	
-		                
 		            }});
 		            vorstellungenPanel.add(infoBoxPanel, gbc);
 		            gbc.gridx++;
@@ -67,7 +64,6 @@ public class ScreeningsGUI extends JFrame {
 		                gbc.gridx = 0;
 		                gbc.gridy++;
 		            }
-				
 			}
 			vorstellungen.close();
 			this.pack();

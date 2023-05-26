@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import Database.IDatabaseAdapter;
 import Database.SQLiteAdapter;
-import java.io.File;
 import java.util.ArrayList;
 import java.awt.GridBagConstraints;
 import java.awt.*;
@@ -63,11 +62,6 @@ public class MainGUI extends JFrame {
         scrollPane = new JScrollPane(filmplakatePanel);
         panel.add(scrollPane, BorderLayout.CENTER);
         this.setContentPane(panel);
-        
-      
-        
-        File ordner = new File(ordnerpfad);
-        File[] dateien = ordner.listFiles();
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -144,6 +138,4 @@ public class MainGUI extends JFrame {
     	signOutButton.addActionListener(listener);
     	showBookingsButton.addActionListener(listener);
     }
-    
- 
 }
