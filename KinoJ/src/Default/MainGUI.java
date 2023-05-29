@@ -23,6 +23,7 @@ public class MainGUI extends JFrame {
 	private JScrollPane scrollPane;
 	private IDatabaseAdapter databaseAdapter;
 	private String  ordnerpfad = System.getProperty("user.dir") + "\\src\\Bilder\\";
+	String film;
 	
 	public MainGUI() {
 		super("Kino");
@@ -101,6 +102,7 @@ public class MainGUI extends JFrame {
             public void mouseClicked(MouseEvent e) {
             	System.out.println("Plakat " + film + " wurde geklickt.");
             	new ScreeningsGUI(plakatPanel, film);
+            	refresh();
             	
                 
             }
@@ -149,11 +151,69 @@ public class MainGUI extends JFrame {
     
     public void refresh() {
     	
-    	this.repaint();
+    	this.filmplakatePanel.removeAll();
+    	this.filmplakatePanel.setLayout(new GridBagLayout());
     	
+    	 GridBagConstraints gbc = new GridBagConstraints();
+         gbc.gridx = 0;
+         gbc.gridy = 0;
+         gbc.insets = new Insets(10, 10, 10, 10); // Abstand zwischen den Filmplakaten
     	
+    	 ArrayList<String> filme = this.databaseAdapter.getMoviesWithScreeningAndPoster();
+         
+         filme.forEach(film -> {
+         
+         ImageIcon bildIcon = new ImageIcon(ordnerpfad + film +".jpg");
+         
+         int desiredWidth = 200;
+         int desiredHeight = 300;
+         Image scaledImage = bildIcon.getImage().getScaledInstance(desiredWidth, desiredHeight, Image.SCALE_SMOOTH);
+         ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+         JLabel bildLabel = new JLabel(scaledIcon);
+
+         
+         JLabel titelLabel = new JLabel(film);
+         titelLabel.setPreferredSize(new Dimension(150, titelLabel.getPreferredSize().height)); // Maximale Breite des Labels festlegen
+         titelLabel.setToolTipText(film); // Hinzufügen eines Tooltips, um den vollständigen Titel anzuzeigen
+
+         if (film.length() > 20) {
+             // Titel abschneiden und mit ... enden
+             String abgeschnittenerTitel = film.substring(0, 20) + "...";
+             titelLabel.setText(abgeschnittenerTitel);
+         }
+
+         JPanel plakatPanel = new JPanel(new BorderLayout());
+         plakatPanel.add(bildLabel, BorderLayout.CENTER);
+         plakatPanel.add(titelLabel, BorderLayout.SOUTH);
+         		
+         plakatPanel.addMouseListener(new MouseAdapter() {
+             @Override
+             public void mouseClicked(MouseEvent e) {
+             	System.out.println("Plakat " + film + " wurde geklickt.");
+             	new ScreeningsGUI(plakatPanel, film);
+             	refresh();
+             	
+                 
+             } });
     	
-    }
+         filmplakatePanel.add(plakatPanel, gbc);
+         gbc.gridx++;
+         
+         if (gbc.gridx % 3 == 0) {
+             gbc.gridx = 0;
+             gbc.gridy++;
+         
+         
+         this.pack();
+         this.setLocationRelativeTo(null);
+ 	      setVisible(true);
+    	
     
     
+    
+         
+    };
+});
+}
 }

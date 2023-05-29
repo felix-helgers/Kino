@@ -24,6 +24,7 @@ public class ScreeningsGUI extends JFrame {
 	public ScreeningsGUI(JPanel plakatPanel, String film) {
 		super("Vorstellungen");
 		this.setSize(1500, 1000);
+		this.setAlwaysOnTop(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         IDatabaseAdapter databaseAdapter = SQLiteAdapter.getInstance();
         JPanel panel = new JPanel(new BorderLayout());
@@ -60,7 +61,8 @@ public class ScreeningsGUI extends JFrame {
 		            @Override
 		            public void mouseClicked(MouseEvent e) {
 		            	try {
-							new LunaKinosaalGUI(vorstellungen.getInt("Saal"));
+							new LunaKinosaalGUI(vorstellungen.getInt("Saal"), vorstellungen.getInt("ID"));
+							dispose();
 						} catch (SQLException e1) {
 							
 						e1.printStackTrace();

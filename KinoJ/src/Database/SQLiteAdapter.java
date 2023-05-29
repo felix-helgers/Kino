@@ -211,7 +211,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	
 	public ResultSet getVorstellungen (String film) {
 		this.ensureConnection();
-		return this.executeQuery("Select v.Saal, v.Startzeit, v.Datum from Vorstellung v inner join Film f on v.Film = f.ID where f.Name ='" + film + "';");
+		return this.executeQuery("Select v.Saal, v.Startzeit, v.Datum, v.ID from Vorstellung v inner join Film f on v.Film = f.ID where f.Name ='" + film + "';");
 	}
 
 	@Override
@@ -250,18 +250,24 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	}
 	
 	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID ) {
-		
 		int returnArray[] = new int[2];
+		try {
+		     ResultSet resultSetPlatz = this.executeQuery("select s.Platzkategorie from Seats s inner join v_res v on s.SaalNr = v.Saal where v.VorstellungsID = " + vorstellungID + "and v.Seat = '" + seatNr + "';");
+				
+					while(resultSetPlatz.next()) {
+						returnArray[0] = resultSetPlatz.getInt("Platzkategorie");
+					}
+						resultSetPlatz.close();
+						
 		
-		ResultSet resultSetPlatz = this.executeQuery()
-				while(resultSetPlatz.next()) {
-					returnArray[0] = resultSetPlatz.getInt("Platzkategorie");
+		ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
+		while(resultSetPlatz.next()) {
+			returnArray[1] = resultSetPlatz.getInt(1);
+		}  resultSetPlatz.close();
 					
-				}
-		resultSetPlatz.close();
+		} catch (SQLException e) {
 		
+		}
+		return returnArray;
 		
-		
-		
-	}
-}
+}}
