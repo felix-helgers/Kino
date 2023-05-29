@@ -6,7 +6,7 @@ import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
 
-	private final String DatabasePath = System.getProperty("user.dir") + "\\Database\\Kino.db";
+	private final String DatabasePath = System.getProperty("user.dir") + "\\..\\Database\\Kino.db";
 
 	private Connection conn;
 	private static SQLiteAdapter instance;
@@ -212,5 +212,40 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public ResultSet getVorstellungen (String film) {
 		this.ensureConnection();
 		return this.executeQuery("Select v.Saal, v.Startzeit, v.Datum from Vorstellung v inner join Film f on v.Film = f.ID where f.Name ='" + film + "';");
+	}
+
+	@Override
+	public ResultSet getSeatsForCinema(int cinemaID) {
+		this.ensureConnection();
+		return this.executeQuery("Select * from Seats where SaalNr = " + cinemaID + ";");
+	}
+
+	@Override
+	public int getSitzplatzReihenAnzahl(int cinemaID) {
+		try {
+			ResultSet highestSeatNr = this.executeQuery("Select * from Seats where SaalNr = " + cinemaID + " order by SeatNr desc LIMIT 1;");
+		    while(highestSeatNr.next()) {
+				String seatNr = highestSeatNr.getString("SeatNr");
+				String buchstabe = seatNr.substring(0, 1);
+				int zahl = buchstabe.charAt(0) - 'A' + 1;
+				return zahl;
+		    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	@Override
+	public int getSeatsInRow(int cinemaID, int RowID) {
+		char rowLetter = (char)('A' + RowID - 1);
+		ResultSet seatsInRow = this.executeQuery("Select Count(*) from Seats where SaalNr = " + cinemaID + " And SeatNr ILike '" + rowLetter + "%';");
+		try {
+			seatsInRow.last();
+			return (int)seatsInRow.getRow();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

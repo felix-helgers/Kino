@@ -15,6 +15,9 @@ public interface IDatabaseAdapter {
 	public boolean CreateScreening(int film, int hall, String startTime);
 	public ArrayList<String> getMoviesWithScreeningAndPoster();
 	public void deleteReservation(int reservierungsID);
+	public ResultSet getSeatsForCinema(int cinemaID);
 	public ResultSet getReservierungen(User user);
 	public ResultSet getVorstellungen(String film);
+	public int getSitzplatzReihenAnzahl(int cinemaID);
+	public int getSeatsInRow(int cinemaID, int RowID);
 }

@@ -24,12 +24,13 @@ public class ScreeningsGUI extends JFrame {
 	public ScreeningsGUI(JPanel plakatPanel, String film) {
 		super("Vorstellungen");
 		this.setSize(1500, 1000);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         IDatabaseAdapter databaseAdapter = SQLiteAdapter.getInstance();
         JPanel panel = new JPanel(new BorderLayout());
         JPanel vorstellungenPanel = new JPanel(new GridBagLayout());
         JScrollPane scrollPane = new JScrollPane(vorstellungenPanel);
         panel.add(scrollPane, BorderLayout.EAST);
+        plakatPanel.removeMouseListener(plakatPanel.getMouseListeners()[0]);
         panel.add(plakatPanel, BorderLayout.WEST);
         this.add(panel);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -40,6 +41,9 @@ public class ScreeningsGUI extends JFrame {
         ResultSet vorstellungen =  databaseAdapter.getVorstellungen(film);
         
         try {
+        	if (vorstellungen == null) {
+        		return;
+        	}
 			while (vorstellungen.next()) {
 				
 				JPanel infoBoxPanel = new JPanel();
@@ -55,6 +59,12 @@ public class ScreeningsGUI extends JFrame {
 		        infoBoxPanel.addMouseListener(new MouseAdapter() {
 		            @Override
 		            public void mouseClicked(MouseEvent e) {
+		            	try {
+							new LunaKinosaalGUI(vorstellungen.getInt("Saal"));
+						} catch (SQLException e1) {
+							
+						e1.printStackTrace();
+						}
 		            	System.out.println("Vorstellung wurde angeklickt.");
 		            }});
 		            vorstellungenPanel.add(infoBoxPanel, gbc);
@@ -65,7 +75,7 @@ public class ScreeningsGUI extends JFrame {
 		                gbc.gridy++;
 		            }
 			}
-			vorstellungen.close();
+			//vorstellungen.close();
 			this.pack();
 	        this.setLocationRelativeTo(null);
 		    setVisible(true);

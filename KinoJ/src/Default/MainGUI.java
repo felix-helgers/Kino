@@ -22,7 +22,7 @@ public class MainGUI extends JFrame {
 	private JPanel filmplakatePanel;
 	private JScrollPane scrollPane;
 	private IDatabaseAdapter databaseAdapter;
-	private String  ordnerpfad = System.getProperty("user.dir") + "\\KinoJ\\bin\\Bilder\\";
+	private String  ordnerpfad = System.getProperty("user.dir") + "\\src\\Bilder\\";
 	
 	public MainGUI() {
 		super("Kino");
@@ -103,7 +103,13 @@ public class MainGUI extends JFrame {
             	new ScreeningsGUI(plakatPanel, film);
                 
             }
-        });		
+        });
+        
+//        JPanel plakatPanel2 = new JPanel(new BorderLayout());
+//        for (int i = 0; i < plakatPanel.getComponentCount(); i++) {
+//        	plakatPanel2.add(plakatPanel.getComponent(i));        	
+//        }
+        
         filmplakatePanel.add(plakatPanel, gbc);
         gbc.gridx++;
         
