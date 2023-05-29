@@ -101,6 +101,7 @@ public class MainGUI extends JFrame {
             public void mouseClicked(MouseEvent e) {
             	System.out.println("Plakat " + film + " wurde geklickt.");
             	new ScreeningsGUI(plakatPanel, film);
+            	
                 
             }
         });
@@ -121,6 +122,7 @@ public class MainGUI extends JFrame {
         this.pack();
         this.setLocationRelativeTo(null);
 	    setVisible(true);
+	    
 	}
 	
 	public void setUserLabel(String username) {
@@ -144,4 +146,14 @@ public class MainGUI extends JFrame {
     	signOutButton.addActionListener(listener);
     	showBookingsButton.addActionListener(listener);
     }
+    
+    public void refresh() {
+    	
+    	this.repaint();
+    	
+    	
+    	
+    }
+    
+    
 }

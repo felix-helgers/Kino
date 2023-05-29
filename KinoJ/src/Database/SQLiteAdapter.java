@@ -248,4 +248,20 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		}
 		return 0;
 	}
+	
+	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID ) {
+		
+		int returnArray[] = new int[2];
+		
+		ResultSet resultSetPlatz = this.executeQuery()
+				while(resultSetPlatz.next()) {
+					returnArray[0] = resultSetPlatz.getInt("Platzkategorie");
+					
+				}
+		resultSetPlatz.close();
+		
+		
+		
+		
+	}
 }
