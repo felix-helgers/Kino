@@ -21,6 +21,35 @@ public class LunaKinosaalGUI extends JFrame {
 	JButton bestaetigen;
 	JLabel kosten;
 	
+	public enum Preiskategorien{
+		
+		    LOGE(6,1,"Loge"),
+	        PARKETT(6,2, "Parkett"),
+	        ROLLSTUHL(6,3, "Rollstuhl"),
+	        PREMIUM(10,4, "Premium");
+	        
+	        private int price;
+	        private int kategorie;
+	        private String name;
+	        
+	        private Preiskategorien(int price, int kategorie, String name) {
+	            this.price = price;
+	            this.kategorie = kategorie;
+	            this.name = name;
+	        }
+	        
+	        public int getPrice() {
+	            return price;
+	        }
+	        
+	        public int getKategorie() {
+	        	return kategorie;
+	        }
+		
+		
+		
+	}
+	
     
     public LunaKinosaalGUI(int kinoSaal) {
     	super("Sitzplatz Reservierung");
@@ -38,12 +67,25 @@ public class LunaKinosaalGUI extends JFrame {
         panel.add(bottomPanel, BorderLayout.NORTH);
         this.add(panel);
         int sitzPlatzReihenAnzahl = this.databaseAdapter.getSitzplatzReihenAnzahl(kinoSaal);
-        JPanel sitzPlatzPanel = new JPanel(new GridLayout(1,sitzPlatzReihenAnzahl));
+        JPanel sitzPlatzPanel = new JPanel(new GridLayout(sitzPlatzReihenAnzahl,1));
         
         for(int i = 1; i <= sitzPlatzReihenAnzahl; i++) {
-        	int columnCount = databaseAdapter.getSeatsInRow(kinoSaal, i);
+        	int seatCount = databaseAdapter.getSeatsInRow(kinoSaal, i);
+        	JPanel sitzPlatzReihe = new JPanel(new GridLayout(1, seatCount));
+        	
+        	
+        	for(int ii = 0; i <= seatCount; ii++) {
+        		JCheckBox sitzPlatz = new JCheckBox();
+        		
+        		
+        		sitzPlatzReihe.add(sitzPlatz);
+        		
+        	}
+        	
         }
         
+        JCheckBox box = new JCheckBox();
+        box.setEnabled(false);
         
         
         panel.add(sitzPlatzPanel, BorderLayout.CENTER);
