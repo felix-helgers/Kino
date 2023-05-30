@@ -36,9 +36,10 @@ import Database.SQLiteAdapter;
             kosten = new JLabel("Kosten gesamt:  " + this.kosteninEuro + " €");
             bestaetigen = new JButton("Bestätigen");
             bestaetigen.addActionListener(e -> {
+                databaseAdapter.makeBuchung(Main.currentUser.getUsername(), kosteninEuro);
                 for (String sitzPlatzNummer : gebuchtePlaetze) {
                     if (Main.currentUser != null){
-                        databaseAdapter.makeBuchung(Main.currentUser.getUsername(), kosteninEuro, vorstellungsID, sitzPlatzNummer);
+                        databaseAdapter.makeReservation(kosteninEuro, vorstellungsID, sitzPlatzNummer);
                     }
                     else {
                         JOptionPane.showMessageDialog(null, "Bitte einloggen", "Kein Benutzer", JOptionPane.ERROR_MESSAGE);

@@ -279,12 +279,17 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		return returnArray;	
 	}
 	
-	public void makeBuchung(String Username, float Preis, int vorstellungID, String sitzPlatzNummer) {
+	public void makeBuchung(String Username, float Preis) {
+		this.ensureConnection();
+
+		System.out.println("Buchung wird erstellt..");
+		this.executeNonQuery("Insert into Buchung (Username, Preis) values ('" + Username + "', " + Preis + ");", 1);
+	}
+
+	public void makeReservation(float Preis, int vorstellungID, String sitzPlatzNummer) {
 		this.ensureConnection();
 
 		try {
-			// System.out.println("Buchung wird erstellt..");
-			// this.executeNonQuery("Insert into Buchung (Username, Preis) values ('" + Username + "', " + Preis + ");", 1);
 			ResultSet BuchungsID = this.executeQuery("Select Max(ID) AS ID from Buchung;");
 			int BuchungsIDInt = BuchungsID.getInt("ID");
 			System.out.println("Reservierung für den Film mit der ID " + vorstellungID + " und dem Platz " + sitzPlatzNummer + " wird erstellt...");
