@@ -20,5 +20,5 @@ public interface IDatabaseAdapter {
 	public ResultSet getVorstellungen(String film);
 	public int getSitzplatzReihenAnzahl(int cinemaID);
 	public int getSeatsInRow(int cinemaID, int RowID);
-	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID );
+	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID, int kinoSaal );
 }

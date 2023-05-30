@@ -21,6 +21,9 @@ import javax.swing.JLabel;
 
 public class ScreeningsGUI extends JFrame {
 	
+	int saal;
+	int vorstellungID;
+	
 	public ScreeningsGUI(JPanel plakatPanel, String film) {
 		super("Vorstellungen");
 		this.setSize(1500, 1000);
@@ -53,6 +56,8 @@ public class ScreeningsGUI extends JFrame {
 		        JLabel saalLabel = new JLabel( "Saal: "+vorstellungen.getInt("Saal"));
 		        JLabel startzeitLabel = new JLabel("Startzeit: " + vorstellungen.getString("Startzeit"));
 		        JLabel datumLabel = new JLabel("Datum: " + vorstellungen.getString("Datum"));
+		        saal = vorstellungen.getInt("Saal");
+		        vorstellungID = vorstellungen.getInt("ID");
 		        infoBoxPanel.add(saalLabel);
 		        infoBoxPanel.add(startzeitLabel);
 		        infoBoxPanel.add(datumLabel);
@@ -60,13 +65,12 @@ public class ScreeningsGUI extends JFrame {
 		        infoBoxPanel.addMouseListener(new MouseAdapter() {
 		            @Override
 		            public void mouseClicked(MouseEvent e) {
-		            	try {
-							new LunaKinosaalGUI(vorstellungen.getInt("Saal"), vorstellungen.getInt("ID"));
+		            	
+							new LunaKinosaalGUI(saal, vorstellungID);
 							dispose();
-						} catch (SQLException e1) {
+						
 							
-						e1.printStackTrace();
-						}
+						
 		            	System.out.println("Vorstellung wurde angeklickt.");
 		            }});
 		            vorstellungenPanel.add(infoBoxPanel, gbc);

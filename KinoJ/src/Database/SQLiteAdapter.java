@@ -238,21 +238,24 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public int getSeatsInRow(int cinemaID, int RowID) {
-		char rowLetter = (char)('A' + RowID - 1);
-		ResultSet seatsInRow = this.executeQuery("Select Count(*) from Seats where SaalNr = " + cinemaID + " And SeatNr ILike '" + rowLetter + "%';");
 		try {
-			seatsInRow.last();
-			return (int)seatsInRow.getRow();
+		char rowLetter = (char)('A' + RowID - 1);
+		ResultSet seatsInRow = this.executeQuery("Select Count(*) from Seats where SaalNr = " + cinemaID + " And SeatNr Like '" + rowLetter + "%';");
+		
+			while(seatsInRow.next()) {
+				return seatsInRow.getInt(1);
+			}
 		} catch (SQLException e) {
+			
 			e.printStackTrace();
 		}
 		return 0;
 	}
 	
-	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID ) {
+	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID, int kinoSaal ) {
 		int returnArray[] = new int[2];
 		try {
-		     ResultSet resultSetPlatz = this.executeQuery("select s.Platzkategorie from Seats s inner join v_res v on s.SaalNr = v.Saal where v.VorstellungsID = " + vorstellungID + "and v.Seat = '" + seatNr + "';");
+		     ResultSet resultSetPlatz = this.executeQuery("select s.Platzkategorie from Seats s where s.SaalNr = "+ kinoSaal +" and s.SeatNr = '" + seatNr + "';");
 				
 					while(resultSetPlatz.next()) {
 						returnArray[0] = resultSetPlatz.getInt("Platzkategorie");
