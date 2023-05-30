@@ -4,22 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
 import Database.IDatabaseAdapter;
 import Database.SQLiteAdapter;
-import javax.swing.JLabel;
+
 import javax.swing.*;
-
-
 
   public class LunaKinosaalGUI extends JFrame {
 
@@ -47,7 +40,12 @@ import javax.swing.*;
             bestaetigen = new JButton("Bestätigen");
             bestaetigen.addActionListener(e -> {
                 for (String sitzPlatzNummer : gebuchtePlaetze) {
-                	
+                    if (Main.currentUser != null){
+                        databaseAdapter.makeBuchung(Main.currentUser.getUsername(), 0, vorstellungsID, sitzPlatzNummer);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Bitte einloggen", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             });
 

@@ -263,7 +263,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 						resultSetPlatz.close();
 						
 		
-		ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
+		// ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
 		while(resultSetPlatz.next()) {
 			returnArray[1] = resultSetPlatz.getInt(1);
 		}  resultSetPlatz.close();
@@ -271,27 +271,11 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		} catch (SQLException e) {
 		
 		}
-		return returnArray;
-		
-}
-	
-
-	public void makeBuchung(String Username, int Preis, int vorstellungID, String sitzPlatzNummer) {
-		
-		
-		
-		
-		
+		return returnArray;	
 	}
-
-
-
-
-
-
-
-
-
-
-
+	
+	public void makeBuchung(String Username, int Preis, int vorstellungID, String sitzPlatzNummer) {
+		this.ensureConnection();
+		this.executeNonQuery("insert into Reservierung (Username, Preis, VorstellungsID, Seat) values ('" + Username + "', " + Preis + ", " + vorstellungID + ", '" + sitzPlatzNummer + "');", 1);		
+	}
 }
