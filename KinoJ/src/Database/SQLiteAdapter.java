@@ -273,4 +273,25 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		}
 		return returnArray;
 		
-}}
+}
+	
+
+	public void makeBuchung(String Username, int Preis, int vorstellungID, String sitzPlatzNummer) {
+		
+		
+		
+		
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+}

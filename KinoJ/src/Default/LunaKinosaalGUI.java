@@ -45,6 +45,11 @@ import javax.swing.*;
             JPanel userButtonPanel = new JPanel();
             kosten = new JLabel("Kosten gesamt:  " + this.kosteninEuro + " €");
             bestaetigen = new JButton("Bestätigen");
+            bestaetigen.addActionListener(e -> {
+                for (String sitzPlatzNummer : gebuchtePlaetze) {
+                	
+                }
+            });
 
             userButtonPanel.add(kosten);
             userButtonPanel.add(bestaetigen);
