@@ -6,7 +6,8 @@ import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
 
-	private final String DatabasePath = System.getProperty("user.dir") + "\\..\\Database\\Kino.db";
+	private final String DatabasePath = "D:\\Entwicklung\\Java\\Kino\\Database\\Kino.db";
+	// private final String DatabasePath = System.getProperty("user.dir") + "\\..\\Database\\Kino.db";
 
 	private Connection conn;
 	private static SQLiteAdapter instance;
@@ -147,7 +148,9 @@ public class SQLiteAdapter implements IDatabaseAdapter {
     }
 	
 	private ResultSet executeQuery(String sql) {
-		ensureConnection();
+		if (!this.ensureConnection()){
+			return null;
+		}
 		
 		try {
 			this.conn.setAutoCommit(true);
@@ -162,7 +165,9 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 
 	@Override
 	public boolean UserNameExists(String username) {
-		ensureConnection();
+		if (!this.ensureConnection()){
+			return true;
+		}
 		
 		try {
 			return executeQuery("Select * from User where username = '" + username + "';").first();
@@ -274,8 +279,18 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		return returnArray;	
 	}
 	
-	public void makeBuchung(String Username, int Preis, int vorstellungID, String sitzPlatzNummer) {
+	public void makeBuchung(String Username, float Preis, int vorstellungID, String sitzPlatzNummer) {
 		this.ensureConnection();
-		this.executeNonQuery("insert into Reservierung (Username, Preis, VorstellungsID, Seat) values ('" + Username + "', " + Preis + ", " + vorstellungID + ", '" + sitzPlatzNummer + "');", 1);		
+
+		try {
+			// System.out.println("Buchung wird erstellt..");
+			// this.executeNonQuery("Insert into Buchung (Username, Preis) values ('" + Username + "', " + Preis + ");", 1);
+			ResultSet BuchungsID = this.executeQuery("Select Max(ID) AS ID from Buchung;");
+			int BuchungsIDInt = BuchungsID.getInt("ID");
+			System.out.println("Reservierung für den Film mit der ID " + vorstellungID + " und dem Platz " + sitzPlatzNummer + " wird erstellt...");
+			this.executeNonQuery("insert into Reservierung (Buchung, Vorstellung, SitzPlatzID, Preis) values ('" + BuchungsIDInt + "', " + vorstellungID + ", '" + sitzPlatzNummer + "', " + (int)Preis + ");", 1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -21,5 +21,5 @@ public interface IDatabaseAdapter {
 	public int getSitzplatzReihenAnzahl(int cinemaID);
 	public int getSeatsInRow(int cinemaID, int RowID);
 	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID, int kinoSaal );
-	public void makeBuchung(String Username, int Preis, int vorstellungID, String sitzPlatzNummer);
+	public void makeBuchung(String Username, float Preis, int vorstellungID, String sitzPlatzNummer);
 }
