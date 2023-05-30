@@ -6,7 +6,7 @@ import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
 
-	private final String DatabasePath = "D:\\Entwicklung\\Java\\Kino\\Database\\Kino.db";
+	private final String DatabasePath = "E:\\eclipse-workspace\\Kino\\Kino\\Database\\Kino.db";
 	// private final String DatabasePath = System.getProperty("user.dir") + "\\..\\Database\\Kino.db";
 
 	private Connection conn;
@@ -187,16 +187,20 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	}
 	
 	public ArrayList<String> getMoviesWithScreeningAndPoster() {
-		
+		if (!this.ensureConnection()){
+			return null;
+		}
+
 	    ArrayList<String> returnArray = new ArrayList<String>();
 		ResultSet filme = executeQuery("select f.Name from Film f inner join Vorstellung v on f.id = v.Film where f.Poster = 1");
 		String value;
-		 try {
+
+		try {
 			while (filme.next()) {
 			       value = filme.getString(1);
 				   returnArray.add(value);
 			    }
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			
 			System.out.println("Filme konnten aus der Datenbank nicht geholt werden");
 		}
@@ -260,21 +264,20 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID, int kinoSaal ) {
 		int returnArray[] = new int[2];
 		try {
-		     ResultSet resultSetPlatz = this.executeQuery("select s.Platzkategorie from Seats s where s.SaalNr = "+ kinoSaal +" and s.SeatNr = '" + seatNr + "';");
+		    ResultSet resultSetPlatz = this.executeQuery("select s.Platzkategorie from Seats s where s.SaalNr = "+ kinoSaal +" and s.SeatNr = '" + seatNr + "';");
 				
-					while(resultSetPlatz.next()) {
-						returnArray[0] = resultSetPlatz.getInt("Platzkategorie");
-					}
-						resultSetPlatz.close();
+			while(resultSetPlatz.next()) {
+				returnArray[0] = resultSetPlatz.getInt("Platzkategorie");
+			}
+			resultSetPlatz.close();
 						
-		
-		// ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
-		while(resultSetPlatz.next()) {
-			returnArray[1] = resultSetPlatz.getInt(1);
-		}  resultSetPlatz.close();
+			// ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
+			while(resultSetPlatz.next()) {
+				returnArray[1] = resultSetPlatz.getInt(1);
+			}  resultSetPlatz.close();
 					
 		} catch (SQLException e) {
-		
+			e.printStackTrace();
 		}
 		return returnArray;	
 	}
@@ -289,6 +292,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	public void makeReservation(float Preis, int vorstellungID, String sitzPlatzNummer) {
 		this.ensureConnection();
 
+		sitzPlatzNummer = getSeatID(sitzPlatzNummer, vorstellungID);
 		try {
 			ResultSet BuchungsID = this.executeQuery("Select Max(ID) AS ID from Buchung;");
 			int BuchungsIDInt = BuchungsID.getInt("ID");
@@ -297,5 +301,16 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String getSeatID(String sitzPlatzNummer, int VorstellungsID){
+		this.ensureConnection();
+		try {
+			ResultSet seatID = this.executeQuery("Select ID from Seats where SeatNr = '" + sitzPlatzNummer + "' and SaalNr = (Select Saal from Vorstellung where ID = " + VorstellungsID + ");");
+			return seatID.getString("ID");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 }

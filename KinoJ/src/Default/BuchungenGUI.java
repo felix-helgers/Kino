@@ -22,7 +22,7 @@ public class BuchungenGUI extends JFrame {
     public BuchungenGUI(User user) {
     	this.user = user;
     	adapter = SQLiteAdapter.getInstance();
-        setTitle("Buchungen");
+        setTitle("Reservierungen");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500, 400);
 
@@ -103,7 +103,6 @@ public class BuchungenGUI extends JFrame {
     }
 	
     class ButtonRenderer extends JButton implements TableCellRenderer {
-
         public ButtonRenderer() {
             setOpaque(true);
         }

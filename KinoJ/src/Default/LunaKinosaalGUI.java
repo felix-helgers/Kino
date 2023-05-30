@@ -41,9 +41,11 @@ import Database.SQLiteAdapter;
                     return;
                 }
                 databaseAdapter.makeBuchung(Main.currentUser.getUsername(), kosteninEuro);
-                for (String sitzPlatzNummer : gebuchtePlaetze) {
-                    databaseAdapter.makeReservation(kosteninEuro, vorstellungsID, sitzPlatzNummer);
+                for (String platzNummer : gebuchtePlaetze) {
+                    databaseAdapter.makeReservation(kosteninEuro, vorstellungsID, platzNummer);
                 }
+                JOptionPane.showMessageDialog(null, "Buchung erfolgreich", "Buchung", JOptionPane.INFORMATION_MESSAGE);
+                this.dispose();
             });
 
             userButtonPanel.add(kosten);
@@ -68,6 +70,9 @@ import Database.SQLiteAdapter;
                     sitzPlatz.setPreferredSize(new Dimension(50, 50));
 
                     sitzPlatzNummer = ((char) ('A' + i - 1)) + Integer.toString(ii);
+                    sitzPlatz.setText(sitzPlatzNummer);
+                    sitzPlatz.setToolTipText("Platz " + sitzPlatzNummer);
+
                     int[] platzUndReservierung = this.databaseAdapter.getReservierungAndPlatzkategorieForSeat(sitzPlatzNummer, vorstellungsID, kinoSaal);
 
                     if (platzUndReservierung[1] == 0) {
@@ -99,10 +104,12 @@ import Database.SQLiteAdapter;
                         	 JCheckBox cb = (JCheckBox) e.getSource();
                         	    if (cb.isSelected()) {
                         	        this.kosteninEuro += (int) cb.getClientProperty("preis"); // Preis abrufen
-                        	        this.gebuchtePlaetze.add(sitzPlatzNummer);
+                        	        this.gebuchtePlaetze.add(cb.getText());
+                                    System.out.println("Nr. " + cb.getText() + " wurde hinzugefügt");
                         	    } else {
                         	        this.kosteninEuro -= (int) cb.getClientProperty("preis"); // Preis abrufen
-                        	        this.gebuchtePlaetze.remove(sitzPlatzNummer);
+                        	        this.gebuchtePlaetze.remove(cb.getText());
+                                    System.out.println("Nr. " + cb.getText() + " wurde entfernt");
                         	    }
                         	    kosten.setText("Kosten gesamt:  " + this.kosteninEuro + " €");
                         });
@@ -110,6 +117,7 @@ import Database.SQLiteAdapter;
                         sitzPlatz.setBackground(Color.GRAY);
                         sitzPlatz.setEnabled(false);
                     }
+                    sitzPlatz.setForeground(sitzPlatz.getBackground());
                     sitzPlatzReihe.add(sitzPlatz);
                 }
                 sitzPlatzPanel.add(sitzPlatzReihe);

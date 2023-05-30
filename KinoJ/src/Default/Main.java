@@ -13,12 +13,12 @@ public class Main {
 	}
 
 	public static void setUserInfos(User user) {
-		System.out.println("Username: " + user.getUsername());
-		System.out.println("FirstName: " + user.getFirstName());
-		System.out.println("LastName: " + user.getLastName());
-		System.out.println("Email: " + user.getEmail());
-		System.out.println("Password: " + user.getPassword());
-		System.out.println("PaymentMethod: " + user.getPaymentMethod());
+		// System.out.println("Username: " + user.getUsername());
+		// System.out.println("FirstName: " + user.getFirstName());
+		// System.out.println("LastName: " + user.getLastName());
+		// System.out.println("Email: " + user.getEmail());
+		// System.out.println("Password: " + user.getPassword());
+		// System.out.println("PaymentMethod: " + user.getPaymentMethod());
 		mad.setUserLabel(user.getUsername());
 		mad.setSighInButtonVisibility(false);
 		mad.setUserButtonVisibility(true);

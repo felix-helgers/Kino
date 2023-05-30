@@ -9,12 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
 import Database.SQLiteAdapter;
 import Database.IDatabaseAdapter;
 import javax.swing.JLabel;
@@ -65,21 +63,18 @@ public class ScreeningsGUI extends JFrame {
 		        infoBoxPanel.addMouseListener(new MouseAdapter() {
 		            @Override
 		            public void mouseClicked(MouseEvent e) {
-		            	
-							new LunaKinosaalGUI(saal, vorstellungID);
-							dispose();
-						
-							
-						
+						new LunaKinosaalGUI(saal, vorstellungID);
+						dispose();
 		            	System.out.println("Vorstellung wurde angeklickt.");
-		            }});
-		            vorstellungenPanel.add(infoBoxPanel, gbc);
-		            gbc.gridx++;
-		            
-		            if (gbc.gridx % 2 == 0) {
-		                gbc.gridx = 0;
-		                gbc.gridy++;
 		            }
+				});
+		        vorstellungenPanel.add(infoBoxPanel, gbc);
+		        gbc.gridx++;
+		            
+		        if (gbc.gridx % 2 == 0) {
+		            gbc.gridx = 0;
+		        	gbc.gridy++;
+		        }
 			}
 			//vorstellungen.close();
 			this.pack();
@@ -90,5 +85,4 @@ public class ScreeningsGUI extends JFrame {
 			e.printStackTrace();
 		}
 	}
-
 }
