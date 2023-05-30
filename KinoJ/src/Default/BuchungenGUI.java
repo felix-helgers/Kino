@@ -1,5 +1,7 @@
 package Default;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -24,7 +26,8 @@ public class BuchungenGUI extends JFrame {
     	adapter = SQLiteAdapter.getInstance();
         setTitle("Reservierungen");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500, 400);
+        setSize(700, 400);
+        this.setLocationRelativeTo(null);
 
         // Erstellen der Tabelle
         tableModel = new DefaultTableModel();
@@ -62,8 +65,8 @@ public class BuchungenGUI extends JFrame {
                 if (row >= 0 && column >= 0) {
                     adapter.deleteReservation(Integer.parseInt(table.getValueAt(row, 0).toString()));
                     tableModel.removeRow(row);
+                    tableModel.fireTableDataChanged();
                 }
-              
             }
         });
         this.refreshTable();
@@ -71,35 +74,31 @@ public class BuchungenGUI extends JFrame {
     }
 
     public void refreshTable() {
-        // Code zum Aktualisieren der Tabelle aus der SQLite-Datenbank hier einf�gen
-        // Verbindung zur Datenbank herstellen, SQL-SELECT-Statement ausf�hren, usw.
-        // Beispielcode:
         tableModel.setRowCount(0); // Alle vorhandenen Zeilen entfernen
-            ResultSet resultSet = adapter.getReservierungen(user);       
-            try {
-				while (resultSet.next()) {
-				    int id = resultSet.getInt("ReservierungsID");
-					String filmname = resultSet.getString("Name");
-				    int saal = resultSet.getInt("Saal");
-				    String platznummer = resultSet.getString("Seat");
-				    String uhrzeit = resultSet.getString("Uhrzeit");
-				    String datum = resultSet.getString("Datum");
+        ResultSet resultSet = adapter.getReservierungen(user);       
+        try {
+		    while (resultSet.next()) {
+			    int id = resultSet.getInt("ReservierungsID");
+				String filmname = resultSet.getString("Name");
+			    int saal = resultSet.getInt("Saal");
+			    String platznummer = resultSet.getString("Seat");
+			    String uhrzeit = resultSet.getString("Uhrzeit");
+			    String datum = resultSet.getString("Datum");
 
-				    Vector<String> row = new Vector<>();
-				    row.add(Integer.toString(id));
-				    row.add(filmname);
-				    row.add(Integer.toString(saal));
-				    row.add(platznummer);
-				    row.add(uhrzeit);
-				    row.add(datum);
-				    tableModel.addRow(row);
-				}
-				
-				resultSet.close();
-            
-            } catch (SQLException e) {
-				e.printStackTrace();
+			    Vector<String> row = new Vector<>();
+			    row.add(Integer.toString(id));
+			    row.add(filmname);
+			    row.add(Integer.toString(saal));
+			    row.add(platznummer);
+			    row.add(uhrzeit);
+			    row.add(datum);
+			    tableModel.addRow(row);
 			}
+			resultSet.close();
+            
+        } catch (SQLException e) {
+			e.printStackTrace();
+		}
     }
 	
     class ButtonRenderer extends JButton implements TableCellRenderer {
@@ -145,7 +144,7 @@ public class BuchungenGUI extends JFrame {
                 button.setBackground(table.getBackground());
             }
             label = (value == null) ? "" : value.toString();
-            button.setText(label);
+            button.setText("Löschen");
             isPushed = true;
             return button;
         }
@@ -153,7 +152,6 @@ public class BuchungenGUI extends JFrame {
         public Object getCellEditorValue() {
             if (isPushed) {
                 // Aktion ausf�hren, wenn Button geklickt wurde
-                // Hier im Hauptcode umgesetzt
             }
             isPushed = false;
             return label;
@@ -165,7 +163,7 @@ public class BuchungenGUI extends JFrame {
         }
 
         protected void fireEditingStopped() {
-         //   super.fireEditingStopped();
+            //super.fireEditingStopped();
         }
 
         public void addActionListener(ActionListener listener) {

@@ -29,6 +29,7 @@ public class MainGUI extends JFrame {
 	public MainGUI() {
 		super("Kino");
 		this.setSize(730, 1000);
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         databaseAdapter = SQLiteAdapter.getInstance();
@@ -66,7 +67,6 @@ public class MainGUI extends JFrame {
         this.setContentPane(panel);
         
         refresh();
-        this.setLocationRelativeTo(null);
 	}
 	
 	public void setUserLabel(String username) {
