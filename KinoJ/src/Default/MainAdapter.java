@@ -27,6 +27,10 @@ public class MainAdapter implements ActionListener {
 		mainGUI.setSighInButtonVisibility(visibility);
 	}
 	
+	public void setBookingEnables(boolean enabled) {
+		mainGUI.setBookingEnables(enabled);
+	}
+	
 	public void setUserLabel(String username) {
 		mainGUI.setUserLabel(username + "  ");
 	}
@@ -46,7 +50,8 @@ public class MainAdapter implements ActionListener {
 			setUserButtonVisibility(false);
 			setSighInButtonVisibility(true);
 		} else if (e.getSource() == mainGUI.showBookingsButton) {
-             new BuchungenGUI(Main.currentUser);		
+             new BuchungenGUI(Main.currentUser);
+             Main.currentUser = null;
         }
 	}
 }

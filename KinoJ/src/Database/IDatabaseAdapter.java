@@ -23,4 +23,5 @@ public interface IDatabaseAdapter {
 	public int[] getReservierungAndPlatzkategorieForSeat(String seatNr, int vorstellungID, int kinoSaal );
 	public void makeBuchung(String Username, float Preis);
 	public void makeReservation(float Preis, int vorstellungID, String sitzPlatzNummer);
+	public boolean userHasBockings(String username);
 }

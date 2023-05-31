@@ -93,6 +93,10 @@ public class MainGUI extends JFrame {
 		showBookingsButton.setVisible(visibility);
 	}
 	
+	public void setBookingEnables(boolean enabled) {
+		showBookingsButton.setEnabled(enabled);
+	}
+	
     public void addActionListener(ActionListener listener) {
     	signInButton.addActionListener(listener);
     	registerButton.addActionListener(listener);

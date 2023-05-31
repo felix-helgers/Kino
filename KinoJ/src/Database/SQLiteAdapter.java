@@ -312,4 +312,28 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		}
 		return "";
 	}
+	
+	public boolean userHasBockings(String username) {
+		if (!this.ensureConnection()){
+			return false;
+		}
+		
+		ResultSet rs = null;
+		
+		try {
+			rs = this.executeQuery("Select * from v_Res where username = '" + username + "'");
+			return rs.next();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}				
+			}
+		}
+		return false;
+	}
 }
