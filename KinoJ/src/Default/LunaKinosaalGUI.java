@@ -33,8 +33,8 @@ import Database.SQLiteAdapter;
             JPanel panel = new JPanel(new BorderLayout());
             JPanel bottomPanel = new JPanel(new BorderLayout());
             JPanel userButtonPanel = new JPanel();
-            kosten = new JLabel("Kosten gesamt:  " + this.kosteninEuro + " â‚¬");
-            bestaetigen = new JButton("BestÃ¤tigen");
+            kosten = new JLabel("Kosten gesamt:  " + this.kosteninEuro + " €");
+            bestaetigen = new JButton("Bestätigen");
             bestaetigen.addActionListener(e -> {
                 if (Main.currentUser == null){
                     JOptionPane.showMessageDialog(null, "Bitte einloggen", "Kein Benutzer", JOptionPane.ERROR_MESSAGE);
@@ -46,7 +46,7 @@ import Database.SQLiteAdapter;
                 }
                 JOptionPane.showMessageDialog(null, "Buchung erfolgreich", "Buchung", JOptionPane.INFORMATION_MESSAGE);
                 this.dispose();
-            });
+            }); 
 
             userButtonPanel.add(kosten);
             userButtonPanel.add(bestaetigen);
@@ -57,7 +57,6 @@ import Database.SQLiteAdapter;
             int sitzPlatzReihenAnzahl = this.databaseAdapter.getSitzplatzReihenAnzahl(this.kinoSaal);
 
             JPanel sitzPlatzPanel = new JPanel(new GridLayout(sitzPlatzReihenAnzahl, 1));
-            sitzPlatzPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
            
             for (int i = 1; i <= sitzPlatzReihenAnzahl; i++) {
                 int seatCount = databaseAdapter.getSeatsInRow(this.kinoSaal, i);
@@ -65,36 +64,33 @@ import Database.SQLiteAdapter;
 
                 for (int ii = 1; ii <= seatCount; ii++) {
                     JCheckBox sitzPlatz = new JCheckBox();
-                    sitzPlatz.setMargin(new Insets(5, 5, 5, 5));
-                    sitzPlatz.setBorder(new LineBorder(Color.BLACK));
                     sitzPlatz.setPreferredSize(new Dimension(50, 50));
 
                     sitzPlatzNummer = ((char) ('A' + i - 1)) + Integer.toString(ii);
                     sitzPlatz.setText(sitzPlatzNummer);
-                    sitzPlatz.setToolTipText("Platz " + sitzPlatzNummer);
-
+                    
                     int[] platzUndReservierung = this.databaseAdapter.getReservierungAndPlatzkategorieForSeat(sitzPlatzNummer, vorstellungsID, kinoSaal);
 
                     if (platzUndReservierung[1] == 0) {
                         switch (platzUndReservierung[0]) {
                             case 1:
                                 sitzPlatz.setBackground(Color.BLUE);
-                                sitzPlatz.setToolTipText("Loge");
-                                sitzPlatz.putClientProperty("preis", 6); 
+                                sitzPlatz.setToolTipText("Loge: " + sitzPlatzNummer);
+                                sitzPlatz.putClientProperty("preis", 8); 
                                 break;
                             case 2:
                                 sitzPlatz.setBackground(Color.RED);
-                                sitzPlatz.setToolTipText("Parkett");
+                                sitzPlatz.setToolTipText("Parkett: " + sitzPlatzNummer);
                                 sitzPlatz.putClientProperty("preis", 6); 
                                 break;
                             case 3:
                                 sitzPlatz.setBackground(Color.YELLOW);
-                                sitzPlatz.setToolTipText("Rollstuhl");
+                                sitzPlatz.setToolTipText("Rollstuhl: " + sitzPlatzNummer);
                                 sitzPlatz.putClientProperty("preis", 6); 
                                 break;
                             case 4:
                                 sitzPlatz.setBackground(Color.PINK);
-                                sitzPlatz.setToolTipText("Premium");
+                                sitzPlatz.setToolTipText("Premium: " + sitzPlatzNummer);
                                 sitzPlatz.putClientProperty("preis", 10); 
                                 break;
                         }
@@ -105,17 +101,19 @@ import Database.SQLiteAdapter;
                         	    if (cb.isSelected()) {
                         	        this.kosteninEuro += (int) cb.getClientProperty("preis"); // Preis abrufen
                         	        this.gebuchtePlaetze.add(cb.getText());
-                                    System.out.println("Nr. " + cb.getText() + " wurde hinzugefÃ¼gt");
+                                    System.out.println("Nr. " + cb.getText() + " wurde hinzugefügt");
                         	    } else {
                         	        this.kosteninEuro -= (int) cb.getClientProperty("preis"); // Preis abrufen
                         	        this.gebuchtePlaetze.remove(cb.getText());
                                     System.out.println("Nr. " + cb.getText() + " wurde entfernt");
                         	    }
-                        	    kosten.setText("Kosten gesamt:  " + this.kosteninEuro + " â‚¬");
+                        	    kosten.setText("Kosten gesamt:  " + this.kosteninEuro + " €");
                         });
                     } else {
                         sitzPlatz.setBackground(Color.GRAY);
+                        sitzPlatz.setForeground(Color.GRAY);
                         sitzPlatz.setEnabled(false);
+                        sitzPlatz.setToolTipText("Belegt: " + sitzPlatzNummer);
                     }
                     sitzPlatz.setForeground(sitzPlatz.getBackground());
                     sitzPlatzReihe.add(sitzPlatz);

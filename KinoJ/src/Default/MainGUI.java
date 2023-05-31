@@ -22,15 +22,24 @@ public class MainGUI extends JFrame {
 	private JPanel filmplakatePanel;
 	private JScrollPane scrollPane;
 	private IDatabaseAdapter databaseAdapter;
-	private String ordnerpfad = "E:\\eclipse-workspace\\Kino\\Kino\\KinoJ\\src\\Bilder\\";
-    // private String ordnerpfad = System.getProperty("user.dir") + "\\src\\Bilder\\";
+	//private String ordnerpfad = "E:\\eclipse-workspace\\Kino\\Kino\\KinoJ\\src\\Bilder\\";
+    private String ordnerpfad = System.getProperty("user.dir") + "\\src\\Bilder\\";
 	String film;
+	Dimension size = new Dimension(780, 1000);
 	
 	public MainGUI() {
 		super("Kino");
-		this.setSize(730, 1000);
+		this.setSize(780, 1000);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                size = e.getComponent().getSize();
+                refresh();
+            }
+        });
         
         databaseAdapter = SQLiteAdapter.getInstance();
         
@@ -134,7 +143,9 @@ public class MainGUI extends JFrame {
             filmplakatePanel.add(plakatPanel, gbc);
             gbc.gridx++;
             
-            if (gbc.gridx % 3 == 0) {
+            int colNum = (int)(size.getWidth() / 190) -1;
+            
+            if (gbc.gridx % colNum == 0) {
                 gbc.gridx = 0;
                 gbc.gridy++;
             

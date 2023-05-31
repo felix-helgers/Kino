@@ -6,8 +6,8 @@ import UserManager.User;
 
 public class SQLiteAdapter implements IDatabaseAdapter {
 
-	private final String DatabasePath = "E:\\eclipse-workspace\\Kino\\Kino\\Database\\Kino.db";
-	// private final String DatabasePath = System.getProperty("user.dir") + "\\..\\Database\\Kino.db";
+	//private final String DatabasePath = "E:\\eclipse-workspace\\Kino\\Kino\\Database\\Kino.db";
+	private final String DatabasePath = System.getProperty("user.dir") + "\\..\\Database\\Kino.db";
 
 	private Connection conn;
 	private static SQLiteAdapter instance;
@@ -116,15 +116,11 @@ public class SQLiteAdapter implements IDatabaseAdapter {
         	this.conn.setAutoCommit(false);
 
             statement = this.conn.createStatement();
-            int rowsChanged = statement.executeUpdate(sqlStatement);
+            statement.executeUpdate(sqlStatement);
 
-            if (rowsChanged != expectedRowsChanged) {
-            	this.conn.rollback();
-                System.out.println("Execution failed. Unexpected number of rows changed. Expected: " + expectedRowsChanged + ", Actual: " + rowsChanged);
-            } else {
-            	this.conn.commit();
-                System.out.println("Execution successful. Number of rows changed: " + rowsChanged);
-            }
+            this.conn.commit();
+            System.out.println("Execution successful.");
+
             return true;
         } catch (SQLException e) {
             if (this.conn != null) {
@@ -209,8 +205,11 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 	
 	public void deleteReservation(int reservierungsID) {
 		this.ensureConnection();
-		this.executeNonQuery("delete from Reservierung where ID = "+ reservierungsID, 1);
-		System.out.println("Reservierung mit der ID " + reservierungsID + " wurde gelï¿½scht.");
+		if (this.executeNonQuery("delete from Reservierung where ID = "+ reservierungsID, 1)) {
+			System.out.println("Reservierung mit der ID " + reservierungsID + " wurde geöscht.");			
+		} else {
+			System.out.println("Reservierung mit der ID " + reservierungsID + " konnte nicht geöscht werden.");				
+		}
 	}
 	
 	public ResultSet getReservierungen(User user) {
@@ -271,10 +270,10 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 			}
 			resultSetPlatz.close();
 						
-			// ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
-			while(resultSetPlatz.next()) {
-				returnArray[1] = resultSetPlatz.getInt(1);
-			}  resultSetPlatz.close();
+			ResultSet resultSetReservierung = this.executeQuery("select count(*) from v_Res where VorstellungsID = " + vorstellungID + " and Seat = '" + seatNr + "';");
+			while(resultSetReservierung.next()) {
+				returnArray[1] = resultSetReservierung.getInt(1);
+			}  resultSetReservierung.close();
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -296,7 +295,7 @@ public class SQLiteAdapter implements IDatabaseAdapter {
 		try {
 			ResultSet BuchungsID = this.executeQuery("Select Max(ID) AS ID from Buchung;");
 			int BuchungsIDInt = BuchungsID.getInt("ID");
-			System.out.println("Reservierung fÃ¼r den Film mit der ID " + vorstellungID + " und dem Platz " + sitzPlatzNummer + " wird erstellt...");
+			System.out.println("Reservierung für den Film mit der ID " + vorstellungID + " und dem Platz " + sitzPlatzNummer + " wird erstellt...");
 			this.executeNonQuery("insert into Reservierung (Buchung, Vorstellung, SitzPlatzID, Preis) values ('" + BuchungsIDInt + "', " + vorstellungID + ", '" + sitzPlatzNummer + "', " + (int)Preis + ");", 1);
 		} catch (SQLException e) {
 			e.printStackTrace();

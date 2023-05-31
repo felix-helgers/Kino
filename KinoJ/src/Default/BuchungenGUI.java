@@ -114,7 +114,7 @@ public class BuchungenGUI extends JFrame {
                 setForeground(table.getForeground());
                 setBackground(UIManager.getColor("Button.background"));
             }
-            setText("LÃ¶schen");
+            setText("Löschen");
             return this;
         }
     }
@@ -144,14 +144,19 @@ public class BuchungenGUI extends JFrame {
                 button.setBackground(table.getBackground());
             }
             label = (value == null) ? "" : value.toString();
-            button.setText("LÃ¶schen");
+            button.setText("Löschen");
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                }
+            });
             isPushed = true;
             return button;
         }
 
         public Object getCellEditorValue() {
             if (isPushed) {
-                // Aktion ausfï¿½hren, wenn Button geklickt wurde
+                // Aktion ausführen, wenn Button geklickt wurde
             }
             isPushed = false;
             return label;
